@@ -80,7 +80,7 @@ public class InsertController extends HttpServlet {
         p.setProductID(productID);
         p.setProduct_name(products.get(productID-1).getProduct_name());
         
-        Price pr = new Price(1, p, date, price, raw_decrepsion);
+        Price pr = new Price(0, p, date, price, raw_decrepsion);
         
         PriceDBContext pricedb = new PriceDBContext();
         pricedb.insertPrice(pr);

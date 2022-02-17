@@ -18,25 +18,22 @@ import model.Price;
 public class PriceDBContext extends DBContext{
     public void insertPrice(Price p){
         String sql = "INSERT INTO [Price]\n" +
-                        "           ([PriceID]\n" +
-                        "           ,[ProductID]\n" +
-                        "           ,[Date]\n" +
-                        "           ,[Price]\n" +
-                        "           ,[Decrepsion])\n" +
-                        "     VALUES\n" +
-                        "           (?\n" +
-                        "           ,?\n" +
-                        "           ,?\n" +
-                        "           ,?\n" +
-                        "           ,?)";
+                    "           ([ProductID]\n" +
+                    "           ,[Date]\n" +
+                    "           ,[Price]\n" +
+                    "           ,[Decrepsion])\n" +
+                    "     VALUES\n" +
+                    "           (?\n" +
+                    "           ,?\n" +
+                    "           ,?\n" +
+                    "           ,?)";
         PreparedStatement stm = null;
         try {
             stm = connection.prepareStatement(sql);
-            stm.setInt(1, p.getPriceID());
-            stm.setInt(2, p.getProduct().getProductID());
-            stm.setDate(3, p.getDate());
-            stm.setInt(4, p.getPrice());
-            stm.setString(5, p.getDecrepsion());
+            stm.setInt(1, p.getProduct().getProductID());
+            stm.setDate(2, p.getDate());
+            stm.setInt(3, p.getPrice());
+            stm.setString(4, p.getDecrepsion());
             stm.executeUpdate(); //INSERT UPDATE DELETE
         } catch (SQLException ex) {
             Logger.getLogger(PriceDBContext.class.getName()).log(Level.SEVERE, null, ex);

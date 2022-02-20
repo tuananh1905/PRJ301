@@ -4,9 +4,57 @@
         <servlet-name>InsertController</servlet-name>
         <servlet-class>controller.price.InsertController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>Insert_Flock</servlet-name>
+        <servlet-class>controller.flock.Insert_Flock</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Search_Flock</servlet-name>
+        <servlet-class>controller.flock.Search_Flock</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Edit_Flock</servlet-name>
+        <servlet-class>controller.flock.Edit_Flock</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Delete_Flock</servlet-name>
+        <servlet-class>controller.flock.Delete_Flock</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Insert_Financial_Record</servlet-name>
+        <servlet-class>controller.financial_statements.Insert_Financial_Record</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Search_Financial_Statements</servlet-name>
+        <servlet-class>controller.financial_statements.Search_Financial_Statements</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>InsertController</servlet-name>
         <url-pattern>/Price/Insert</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Insert_Flock</servlet-name>
+        <url-pattern>/Flock/Insert</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Search_Flock</servlet-name>
+        <url-pattern>/Flock/Search</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Edit_Flock</servlet-name>
+        <url-pattern>/Flock/Edit</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Delete_Flock</servlet-name>
+        <url-pattern>/Flock/Delete</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Insert_Financial_Record</servlet-name>
+        <url-pattern>/Financial_Statements/Insert</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Search_Financial_Statements</servlet-name>
+        <url-pattern>/Financial_Statements/Search</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

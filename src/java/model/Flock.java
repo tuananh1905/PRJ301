@@ -13,14 +13,16 @@ import java.sql.Date;
  */
 public class Flock {
     private int FID;
+    private String FName;
     private Date Purchase_date;
     private Date Sale_date;
 
     public Flock() {
     }
 
-    public Flock(int FID, Date Purchase_date, Date Sale_date) {
+    public Flock(int FID, String FName, Date Purchase_date, Date Sale_date) {
         this.FID = FID;
+        this.FName = FName;
         this.Purchase_date = Purchase_date;
         this.Sale_date = Sale_date;
     }
@@ -31,6 +33,14 @@ public class Flock {
 
     public void setFID(int FID) {
         this.FID = FID;
+    }
+
+    public String getFName() {
+        return FName;
+    }
+
+    public void setFName(String FName) {
+        this.FName = FName;
     }
 
     public Date getPurchase_date() {
@@ -48,5 +58,4 @@ public class Flock {
     public void setSale_date(Date Sale_date) {
         this.Sale_date = Sale_date;
     }
-    
 }

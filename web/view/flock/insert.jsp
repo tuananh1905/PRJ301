@@ -11,12 +11,10 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>JSP Page</title>
     </head>
+    <script>
+        document.getElementById("id_span").hiden="true";
+    </script>
     <body>
-        <form action="Insert" method="POST">
-            Flock name: <input type="text" name="name"/> <br/>
-            Purchase date: <input type="date" name="purchase"/> <br/>
-            Sale date: <input type="date" name="sale"/> <br/>
-            <input type="submit" value="Save"/>
-        </form>
+        <jsp:include page="submitForm.jsp"/>
     </body>
 </html>

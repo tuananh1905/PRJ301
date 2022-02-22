@@ -85,7 +85,8 @@ public class Edit_Flock extends HttpServlet {
         
         if(raw_FName!=null){
             Date purchase_date_updated = Date.valueOf(raw_purchase_date);
-            Date sale_date_updated = Date.valueOf(raw_sale_date);
+            Date sale_date_updated = (raw_sale_date.equals(""))?null:Date.valueOf(raw_sale_date);
+//            Date sale_date_updated = Date.valueOf(raw_sale_date);
             
             Flock f_updated = new Flock(FID, raw_FName, purchase_date_updated, sale_date_updated);
             fd.updateFlock(f_updated);

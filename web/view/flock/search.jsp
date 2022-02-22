@@ -13,8 +13,8 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>JSP Page</title>
-        <link rel="stylesheet" type="text/css" href="<c:url value = "../css/testPopUp.css" />" />
-        <script defer src="<c:url value = "../js/testPopUp.js"/>"></script>
+        <link rel="stylesheet" type="text/css" href="<c:url value = "../css/popupModal.css" />" />
+        <script defer src="<c:url value = "../js/popupModal.js"/>"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
         <%
             ArrayList<Flock> flocks = (ArrayList<Flock>) request.getAttribute("flocks");

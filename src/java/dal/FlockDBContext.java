@@ -150,4 +150,35 @@ public class FlockDBContext extends DBContext {
             }
         }
     }
+    public void deleteFlock(int FID){
+        String sql = "DELETE FROM [Flocks]\n" +
+                    "      WHERE [FID] = ?";
+        PreparedStatement stm = null;
+        try {
+            stm = connection.prepareStatement(sql);
+            stm.setInt(1, FID);
+            stm.executeUpdate(); //INSERT UPDATE DELETE
+        } catch (SQLException ex) {
+            Logger.getLogger(FlockDBContext.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        finally
+        {
+            if(stm != null)
+            {
+                try {
+                    stm.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(FlockDBContext.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            if(connection !=null)
+            {
+                try {
+                    connection.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(FlockDBContext.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+    }
 }

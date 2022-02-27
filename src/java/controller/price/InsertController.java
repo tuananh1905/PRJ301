@@ -65,7 +65,7 @@ public class InsertController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String raw_productID = request.getParameter("pid");
+        String raw_productID = request.getParameter("prdid");
         String raw_date = request.getParameter("date");
         String raw_price = request.getParameter("price");
         String raw_decrepsion = request.getParameter("decrepsion");

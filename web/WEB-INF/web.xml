@@ -28,6 +28,22 @@
         <servlet-name>Search_Financial_Statements</servlet-name>
         <servlet-class>controller.financial_statements.Search_Financial_Statements</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>View</servlet-name>
+        <servlet-class>controller.price.View</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>showPriceTable</servlet-name>
+        <servlet-class>controller.price.showPriceTable</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Edit</servlet-name>
+        <servlet-class>controller.price.Edit</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Delete</servlet-name>
+        <servlet-class>controller.price.Delete</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>InsertController</servlet-name>
         <url-pattern>/Price/Insert</url-pattern>
@@ -55,6 +71,22 @@
     <servlet-mapping>
         <servlet-name>Search_Financial_Statements</servlet-name>
         <url-pattern>/Financial_Statements/Search</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>View</servlet-name>
+        <url-pattern>/Price/View</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>showPriceTable</servlet-name>
+        <url-pattern>/Price/showPriceTable</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Edit</servlet-name>
+        <url-pattern>/Price/Edit</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Delete</servlet-name>
+        <url-pattern>/Price/Delete</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

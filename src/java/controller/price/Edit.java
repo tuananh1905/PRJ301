@@ -3,11 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package controller.flock;
+package controller.price;
 
-import dal.FlockDBContext;
+import dal.PriceDBContext;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Date;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -17,7 +18,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author TuanAnh
  */
-public class Delete_Flock extends HttpServlet {
+public class Edit extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -30,19 +31,19 @@ public class Delete_Flock extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet Delete_Flock</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet Delete_Flock at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
+        String raw_pid = request.getParameter("pid");
+        String raw_prdid = request.getParameter("prdid");
+        String raw_date = request.getParameter("date");
+        String raw_price = request.getParameter("price");
+        String raw_decrepsion = request.getParameter("decrepsion");
+        
+        int pid = Integer.parseInt(raw_pid);
+        int prdid = Integer.parseInt(raw_prdid);
+        Date date = Date.valueOf(raw_date);
+        int price = Integer.parseInt(raw_price);
+        
+        PriceDBContext pd = new PriceDBContext();
+        pd.updateFlock(pid, prdid, date, price, raw_decrepsion);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -71,10 +72,7 @@ public class Delete_Flock extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        int FID = Integer.parseInt(request.getParameter("FID"));
-        FlockDBContext fd = new FlockDBContext();
-        fd.deleteFlock(FID);
-        response.sendRedirect("Search");
+        processRequest(request, response);
     }
 
     /**

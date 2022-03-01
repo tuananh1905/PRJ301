@@ -71,7 +71,7 @@ public class Delete_Flock extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        int FID = Integer.parseInt(request.getParameter("FID"));
+        int FID = Integer.parseInt(request.getParameter("ID"));
         FlockDBContext fd = new FlockDBContext();
         fd.deleteFlock(FID);
         response.sendRedirect("Search");

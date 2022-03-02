@@ -43,8 +43,32 @@
                     type: 'POST',
                     url: $('#searchForm').attr('action'),
                     data: $('#searchForm').serialize(),
-                    success: function (data) {
-                        $('#tableField').html(data);
+                    dataType: "json",
+                    success: function (jsondata) {
+                        var html = "";
+                        html += "<table border=\"1px\" id=\"myTable\">\n"
+                            + "                <tr>\n"
+                            + "                    <td>ID</td>\n"
+                            + "                    <td>Name</td>\n"
+                            + "                    <td>Purchase date</td>\n"
+                            + "                    <td>Sale date</td>\n"
+                            + "                    <td>Interactive</td>\n"
+                            + "                </tr>\n";
+                        $.each(jsondata, function (key, item){
+                            html += "                <tr>\n"
+                                    + "                    <td>" + item['FID'] + "</td>\n"
+                                    + "                    <td>" + item['FName'] + "</td>\n"
+                                    + "                    <td>" + item['Purchase_date'] + "</td>\n"
+                                    + "                    <td>" + item['Sale_date'] + "</td>\n"
+                                    + "                    <td>\n"
+                                    + "                        <button id=\"edit\" data-modal-target=\"#modal\">Edit</button>\n"
+                                    + "                        <button id=\"delete\" data-modal-target=\"#modalDelete\">Delete</button>\n"
+                                    + "                        <button id=\"interactive\" data-modal-target=\"#modal\">Information</button>\n"
+                                    + "\n"
+                                    + "                    </td>\n"
+                                    + "               </tr>\n";
+                        });
+                        $('#tableField').html(html);
                         $.getScript("../js/popupModal.js");
                         $.getScript("../js/popupModalDelete.js");
                         $.getScript("../js/takeFlockDataFromTable.js");

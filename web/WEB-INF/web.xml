@@ -44,6 +44,10 @@
         <servlet-name>Delete</servlet-name>
         <servlet-class>controller.price.Delete</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>showFSTable</servlet-name>
+        <servlet-class>controller.financial_statements.showFSTable</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>InsertController</servlet-name>
         <url-pattern>/Price/Insert</url-pattern>
@@ -87,6 +91,10 @@
     <servlet-mapping>
         <servlet-name>Delete</servlet-name>
         <url-pattern>/Price/Delete</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>showFSTable</servlet-name>
+        <url-pattern>/Financial_Statements/showFSTable</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

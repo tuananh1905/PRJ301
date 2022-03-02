@@ -3,24 +3,20 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package controller.flock;
+package controller.financial_statements;
 
-import com.google.gson.Gson;
-import dal.FlockDBContext;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import model.Flock;
 
 /**
  *
  * @author TuanAnh
  */
-public class Search_Flock extends HttpServlet {
+public class showFSTable extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -33,19 +29,19 @@ public class Search_Flock extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String raw_isAvai = request.getParameter("isAvai");
-        raw_isAvai = (raw_isAvai == null || raw_isAvai.length() == 0) ? "-1" : raw_isAvai;
-        int isAvai = Integer.parseInt(raw_isAvai);
-
-        FlockDBContext fd = new FlockDBContext();
-        ArrayList<Flock> flocks = fd.getFlocks(isAvai);
-
-        PrintWriter out = response.getWriter();
-        
-        Gson gson = new Gson();
-        String jsondata = gson.toJson(flocks);
-        
-        out.print(jsondata);
+        response.setContentType("text/html;charset=UTF-8");
+        try (PrintWriter out = response.getWriter()) {
+            /* TODO output your page here. You may use following sample code. */
+            out.println("<!DOCTYPE html>");
+            out.println("<html>");
+            out.println("<head>");
+            out.println("<title>Servlet showFSTable</title>");            
+            out.println("</head>");
+            out.println("<body>");
+            out.println("<h1>Servlet showFSTable at " + request.getContextPath() + "</h1>");
+            out.println("</body>");
+            out.println("</html>");
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -60,9 +56,7 @@ public class Search_Flock extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        FlockDBContext fd1 = new FlockDBContext();
-        ArrayList<Flock> flocks = fd1.getFlocks(-1);
-        request.getRequestDispatcher("../view/flock/search.jsp").forward(request, response);
+        processRequest(request, response);
     }
 
     /**
@@ -71,6 +65,7 @@ public class Search_Flock extends HttpServlet {
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)

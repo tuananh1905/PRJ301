@@ -56,7 +56,7 @@ public class Search_Financial_Statements extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        request.getRequestDispatcher("../view/financial_statements/search.jsp").forward(request, response);
     }
 
     /**

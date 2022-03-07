@@ -5,6 +5,7 @@
  */
 package controller.price;
 
+import com.google.gson.Gson;
 import dal.PriceDBContext;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -33,42 +34,41 @@ public class showPriceTable extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         PrintWriter out = response.getWriter();
-        
+
         int prdid = Integer.parseInt(request.getParameter("prdid"));
         String date = request.getParameter("date");
-        
+
         PriceDBContext pd = new PriceDBContext();
         ArrayList<Price> priceList = pd.getPriceList(prdid, date);
-        String html = "";
-        if(priceList.size()>0){
-            html += "<table border=\"1px\" id=\"myTable\">\n"
-                + "                <tr>\n"
-                + "                    <td>ID</td>\n"
-                + "                    <td>Product Name</td>\n"
-                + "                    <td>Date</td>\n"
-                + "                    <td>Price</td>\n"
-                + "                    <td>Decrepsion</td>\n"
-                + "                    <td>Interactive</td>\n"
-                + "                </tr>\n";
-            for (Price p : priceList) {
-                html += "                <tr>\n"
-                    + "                    <td>" + p.getPriceID() + "</td>\n"
-                    + "                    <td>" + p.getProduct().getProduct_name() + "</td>\n"
-                    + "                    <td>" + p.getDate() + "</td>\n"
-                    + "                    <td>" + p.getPrice() + "</td>\n"
-                    + "                    <td>" + p.getDecrepsion() + "</td>\n"
-                    + "                    <td>\n"
-                    + "                        <button id=\"edit\" data-modal-target=\"#modal\">Edit</button>\n"
-                    + "                        <button id=\"delete\" data-modal-target=\"#modalDelete\">Delete</button>\n"
-                    + "                        <button id=\"interactive\" data-modal-target=\"#modal\">Information</button>\n"
-                    + "                    </td>\n"
-                    + "                </tr>\n";
-            }
-            out.println(html);
-        }
-        else{
-            out.println("No record to display");
-        }
+//        String html = "";
+//        if (priceList.size() > 0) {
+//            html += "<table border=\"1px\" id=\"myTable\">\n"
+//                + "                <tr>\n"
+//                + "                    <td>ID</td>\n"
+//                + "                    <td>Product Name</td>\n"
+//                + "                    <td>Date</td>\n"
+//                + "                    <td>Price</td>\n"
+//                + "                    <td>Decrepsion</td>\n"
+//                + "                    <td>Interactive</td>\n"
+//                + "                </tr>\n";
+//            for (Price p : priceList) {
+//                html += "                <tr>\n"
+//                    + "                    <td>" + p.getPriceID() + "</td>\n"
+//                    + "                    <td>" + p.getProduct().getProduct_name() + "</td>\n"
+//                    + "                    <td>" + p.getDate() + "</td>\n"
+//                    + "                    <td>" + p.getPrice() + "</td>\n"
+//                    + "                    <td>" + p.getDecrepsion() + "</td>\n"
+//                    + "                    <td>\n"
+//                    + "                        <button id=\"edit\" data-modal-target=\"#modal\">Edit</button>\n"
+//                    + "                        <button id=\"delete\" data-modal-target=\"#modalDelete\">Delete</button>\n"
+//                    + "                        <button id=\"interactive\" data-modal-target=\"#modal\">Information</button>\n"
+//                    + "                    </td>\n"
+//                    + "                </tr>\n";
+//            }
+//            out.println(html);
+            Gson gson = new Gson();
+            String jsondata = gson.toJson(priceList);
+            out.print(jsondata);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

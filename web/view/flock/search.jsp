@@ -104,6 +104,5 @@
         </div>
         <jsp:include page="../components/modal_Delete.jsp"/>
         <div id="overlay"></div>
-        <div id="test"></div>
     </body>
 </html>

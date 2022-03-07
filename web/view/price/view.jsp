@@ -26,11 +26,37 @@
                 type: 'POST',
                 url: $('#searchForm').attr('action'),
                 data: $('#searchForm').serialize(),
-                success: function (data) {
-                    $('#priceTable').html(data);
+                dataType: "json",
+                success: function (jsondata) {
+                    var html = "";
+                    html = "<table border=\"1px\" id=\"myTable\">\n"
+                            + "                <tr>\n"
+                            + "                    <td>ID</td>\n"
+                            + "                    <td>Product Name</td>\n"
+                            + "                    <td>Date</td>\n"
+                            + "                    <td>Price</td>\n"
+                            + "                    <td>Decrepsion</td>\n"
+                            + "                    <td>Interactive</td>\n"
+                            + "                </tr>\n";
+                    $.each(jsondata, function (key, item) {
+                        html += "                <tr>\n"
+                                + "                    <td>" + item['PriceID'] + "</td>\n"
+                                + "                    <td>" + item['Product']['Product_name'] + "</td>\n"
+                                + "                    <td>" + item['Date'] + "</td>\n"
+                                + "                    <td>" + item['Price'] + "</td>\n"
+                                + "                    <td>" + item['Decrepsion'] + "</td>\n"
+                                + "                    <td>\n"
+                                + "                        <button id=\"edit\" data-modal-target=\"#modal\">Edit</button>\n"
+                                + "                        <button id=\"delete\" data-modal-target=\"#modalDelete\">Delete</button>\n"
+                                + "                        <button id=\"interactive\" data-modal-target=\"#modal\">Information</button>\n"
+                                + "                    </td>\n"
+                                + "                </tr>\n";
+                    });
+                    $('#priceTable').html(html);
                     $.getScript("../js/popupModal.js");
                     $.getScript("../js/takePriceDataFromTable.js");
                     $.getScript("../js/popupModalDelete.js");
+                    console.log(jsondata);
                 }
             });
         }

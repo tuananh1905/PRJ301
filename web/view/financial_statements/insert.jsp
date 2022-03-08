@@ -18,16 +18,10 @@
                 <script defer src="../js/popupModal.js"></script>-->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
         <script>
-//            document.getElementById("id_span").hiden = "true";
-            window.onload = function () {
-                submitSearchFlock();
-                submitSearchPrice();
-            };
             function submitSearchFlock() {
                 $.ajax({
                     type: 'POST',
                     url: "../Flock/Search",
-//                    data: "isAvai": $("#searchFlock option:selected").val(),
                     data: {"isAvai": $("#searchFlock option:selected").val()},
                     dataType: "json",
                     success: function (jsondata) {
@@ -39,6 +33,7 @@
                     }
                 });
             }
+
             function submitSearchPrice() {
                 $.ajax({
                     type: 'POST',
@@ -52,101 +47,122 @@
                     success: function (jsondata) {
                         var html = "";
                         $.each(jsondata, function (key, item) {
-                            html += "<option value=\"" + item['PriceID'] + "\">" + item['Product']['Product_name'] + " | " + item['Date'] + " | " + item['Price'] + "</option>";
+                            html += "<option value=\"" + item['PriceID'] + "\" id=\"" + item['Product']['ProductID'] + "\" product_name=\"" + item['Product']['Product_name'] + "\" price=\"" + item['Price'] + "\">";
+                            html += item['Product']['Product_name'] + " | " + item['Date'] + " | " + item['Price'];
+                            html += "</option>";
                         });
                         $('#priceField').html(html);
                     }
                 });
             }
-//            var myModal = document.getElementById('myModal')
-//            var myInput = document.getElementById('myInput')
-//
-//            myModal.addEventListener('shown.bs.modal', function () {
-//                myInput.focus()
-//            });
-//            $(document).ready(function () {
-//
-//                var count = 0;
-//
-//                $('#add').click(function () {
-//
-//                });
-//
-//                $('#save').click(function () {
-//                    window.alert();
-//                    var error_quantily = '';
-//                    var quantily = '';
-//                    if ($('#quantily').val() == '') {
-//                        error_quantily = 'Quantily is required';
-//                        $('#error_quantily').text(error_quantily);
-//                        $('#quantily').css('border-color', '#cc0000');
-//                        quantily = '';
-//                    } else {
-//                        error_quantily = '';
-//                        $('#error_quantily').text(error_quantily);
-//                        $('#quantily').css('border-color', '');
-//                        quantily = $('#quantily').val();
-//                    }
-//                    if (error_quantily != '') {
-//                        return false;
-//                    } else {
-//                        if ($('#save').text == 'Save') {
-//                            count += 1;
-//                            var isRevenue = $("#isRevenue").attr("checked") ? "True" : "False";
-//                            var date = $("#date").val();
-//                            var flockID = $("#flockField").val();
-//                            var priceID = $("#priceField").val();
-//                            var total = 150;
-//
-//
-//
-//                            output = '<tr id="row_' + count + '">';
-//                            output += '<td>' + isRevenue + '<input type="hidden" name="hidden_isRevenue[]" id="isRevenue' + count + '" class="isRevenue" value="' + isRevenue + '"/></td>';
-//                            output += '<td>' + date + '<input type="hidden" name="hidden_date[]" id="date' + count + '" class="date" value="' + date + '"/></td>';
-//                            output += '<td>' + flockID + '<input type="hidden" name="hidden_flockID[]" id="flockID' + count + '" class="flockID" value="' + flockID + '"/></td>';
-//                            output += '<td>' + priceID + '<input type="hidden" name="hidden_priceID[]" id="priceID' + count + '" class="priceID" value="' + priceID + '"/></td>';
-//                            output += '<td>' + quantily + '<input type="hidden" name="hidden_quantily[]" id="quantily' + count + '" class="quantily" value="' + quantily + '"/></td>';
-//                            output += '<td>' + total + '<input type="hidden" name="hidden_total[]" id="total' + count + '" class="total" value="' + total + '"/></td>';
-//                            output += '<td><button type="button" name="view_details" class="btn btn-warning btn-xs view_details" id="' + count + '">View</button></td>';
-//                            output += '<td><button type="button" name="remove_details" class="btn btn-danger btn-xs remove_details" id="' + count + '">Remove</button></td>';
-//                            output += '</tr>';
-//                            
-//                            $('FSData').append(output);
-//                        }
-//                    }
-//                });
-//            });
+
             $(document).ready(function () {
+                $('#add').click(function () {
+                    $('#isRevenue').prop('checked', true);
+                    $('#date').val('');
+                    $('#searchFlock').val(-1);
+                    submitSearchFlock();
+                    $('#searchPrice').val(0);
+                    submitSearchPrice();
+                    $('#quantily').val('');
+                    $('#decrepsion').val('');
+                    $('#save').text('Save');
+                });
+
                 var count = 0;
                 $("#save").click(function () {
                     var html = "";
-//                    var isRevenue = $('#isRevenue').val();
-//                    var isRevenue = $("#isRevenue").attr("checked") ? "True" : "False";
                     var isRevenue = $('#isRevenue').is(":checked") ? "Revenue" : "Cost";
                     var date = $('#date').val();
                     var flockID = $('#flockField').val();
-                    var price = $('#priceField').val();
+                    var flockName = $('#flockField option:selected').text();
+                    var priceID = $('#priceField').val();
+                    var price = $('#priceField option:selected').attr('price');
+                    var productName = $('#priceField option:selected').attr('product_name');
                     var quantily = $('#quantily').val();
+                    var total = parseInt(price) * parseInt(quantily);
+                    var decrepsion = $('#decrepsion').val();
 
                     if ($('#quantily').val() == '') {
                         error_quantily = 'Quantily is required';
                         $('#error_quantily').text(error_quantily);
                         $('#quantily').css('border-color', '#cc0000');
                     } else {
-                        count += 1;
-                        var html = '';
-                        html += '<tr id="row_' + count + '">';
-                        html += '     <td>' + isRevenue + '<input type="hidden" name="hidden_isRevenue[' + count + ']" id="isRevenue' + count + '" class="isRevenue" value="' + isRevenue + '"/></td>';
-                        html += '     <td>' + date + '<input type="hidden" name="hidden_date[' + count + ']" id="date' + count + '" class="date" value="' + date + '"/></td>';
-                        html += '     <td>' + flockID + '<input type="hidden" name="hidden_flockID[' + count + ']" id="flockID' + count + '" class="flockID" value="' + flockID + '"/></td>';
-                        html += '     <td>' + price + '<input type="hidden" name="hidden_price[' + count + ']" id="price' + count + '" class="price" value="' + price + '"/></td>';
-                        html += '     <td>' + quantily + '<input type="hidden" name="hidden_quantily[' + count + ']" id="quantily' + count + '" class="quantily" value="' + quantily + '"/></td>';
-                        html += '     <td></td>';
-                        html += '     <td><button type="button" name="view_details" class="btn btn-warning btn-xs view_details" id="' + count + '">View</button></td>';
-                        html += '     <td><button type="button" name="remove_details" class="btn btn-danger btn-xs remove_details" id="' + count + '">Remove</button></td>';
-                        html += '</tr>';
+                        if ($('#save').text() == 'Save') {
+                            count += 1;
+                            var html = '';
+                            html += '<tr id="row_' + count + '">';
+                            html += '     <td>' + isRevenue + '<input type="hidden" name="hidden_isRevenue[' + count + ']" id="isRevenue_' + count + '" class="isRevenue" value="' + isRevenue + '"/></td>';
+                            html += '     <td>' + date + '<input type="hidden" name="hidden_date[' + count + ']" id="date_' + count + '" class="date" value="' + date + '"/></td>';
+                            html += '     <td>' + flockName + '<input type="hidden" name="hidden_flockID[' + count + ']" id="flockID_' + count + '" class="flockID" value="' + flockID + '"/></td>';
+                            html += '     <td>' + productName + '</td>';
+                            html += '     <td>' + price + '<input type="hidden" name="hidden_priceID[' + count + ']" id="priceID_' + count + '" class="priceID" value="' + priceID + '"/></td>';
+                            html += '     <td>' + quantily + '<input type="hidden" name="hidden_quantily[' + count + ']" id="quantily_' + count + '" class="quantily" value="' + quantily + '"/></td>';
+                            html += '     <td>' + total + '<input type="hidden" name="hidden_total[' + count + ']" id="total_' + count + '" class="total" value="' + total + '" </td>';
+                            html += '     <td>' + decrepsion + '<input type="hidden" name="hidden_decrepsion[' + count + ']" id="decrepsion_' + count + '" class="decrepsion" value="' + decrepsion + '" </td>';
+                            html += '     <td><button type="button" name="view_details" class="btn btn-warning btn-xs view_details" id="' + count + '" data-bs-toggle="modal" data-bs-target="#ModalPopup">View</button></td>';
+                            html += '     <td><button type="button" name="remove_details" class="btn btn-danger btn-xs remove_details" id="' + count + '">Remove</button></td>';
+                            html += '</tr>';
 
-                        $('#FSData').append(html);
+                            $('#FSData').append(html);
+                            $('#ModalPopup').modal('toggle');
+                        } else {
+                            var row_id = $('#hidden_row_id').val();
+                            var html = '';
+                            html += '     <td>' + isRevenue + '<input type="hidden" name="hidden_isRevenue[' + row_id + ']" id="isRevenue_' + row_id + '" class="isRevenue" value="' + isRevenue + '"/></td>';
+                            html += '     <td>' + date + '<input type="hidden" name="hidden_date[' + row_id + ']" id="date_' + row_id + '" class="date" value="' + date + '"/></td>';
+                            html += '     <td>' + flockName + '<input type="hidden" name="hidden_flockID[' + row_id + ']" id="flockID_' + row_id + '" class="flockID" value="' + flockID + '"/></td>';
+                            html += '     <td>' + productName + '</td>';
+                            html += '     <td>' + price + '<input type="hidden" name="hidden_priceID[' + row_id + ']" id="priceID_' + row_id + '" class="priceID" value="' + priceID + '"/></td>';
+                            html += '     <td>' + quantily + '<input type="hidden" name="hidden_quantily[' + row_id + ']" id="quantily_' + row_id + '" class="quantily" value="' + quantily + '"/></td>';
+                            html += '     <td>' + total + '<input type="hidden" name="hidden_total[' + row_id + ']" id="total_' + row_id + '" class="total" value="' + total + '" </td>';
+                            html += '     <td>' + decrepsion + '<input type="hidden" name="hidden_decrepsion[' + row_id + ']" id="decrepsion_' + row_id + '" class="decrepsion" value="' + decrepsion + '" </td>';
+                            html += '     <td><button type="button" name="view_details" class="btn btn-warning btn-xs view_details" id="' + row_id + '" data-bs-toggle="modal" data-bs-target="#ModalPopup">View</button></td>';
+                            html += '     <td><button type="button" name="remove_details" class="btn btn-danger btn-xs remove_details" id="' + row_id + '">Remove</button></td>';
+
+                            $('#row_' + row_id + '').html(html);
+                            $('#ModalPopup').modal('toggle');
+                        }
+                    }
+                });
+
+                $(document).on('click', '.view_details', function () {
+                    var row_id = $(this).attr("id");
+                    var isRevenue = $('#isRevenue_' + row_id + '').val();
+                    var date = $('#date_' + row_id + '').val();
+                    var flockID = $('#flockID_' + row_id + '').val();
+                    var priceID = $('#priceID_' + row_id + '').val();
+                    var quantily = $('#quantily_' + row_id + '').val();
+                    var decrepsion = $('#decrepsion_' + row_id + '').val();
+
+                    var check = (isRevenue == 'Revenue') ? true : false;
+                    $('#save').text('Edit');
+                    $('#hidden_row_id').val(row_id);
+                    $('#isRevenue').prop('checked', check);
+                    $('#date').val(date);
+                    $('#flockField').val(flockID);
+                    $('#priceField').val(priceID);
+                    $('#quantily').val(quantily);
+                    $('#decrepsion').val(decrepsion);
+                });
+
+                $('#FSForm').on('submit', function (event) {
+                    event.preventDefault();
+                    var count_data = 0;
+                    $('.isRevenue').each(function () {
+                        count_data += 1;
+                    });
+                    if (count_data > 0) {
+                        $.ajax({
+                            url: '',
+                            method: 'POST',
+                            data: $(this).serialize(),
+                            success: function (data) {
+                                window.alert('success');
+                            }
+                        });
+                    } else {
+                        window.alert('faild');
                     }
                 });
             });
@@ -165,8 +181,10 @@
                             <th>Date</th>
                             <th>Flock</th>
                             <th>Product</th>
+                            <th>Price</th>
                             <th>Quantily</th>
                             <th>Total</th>
+                            <th>Decrepsion</th>
                             <th>Details</th>
                             <th>Remove</th>
                         </tr>

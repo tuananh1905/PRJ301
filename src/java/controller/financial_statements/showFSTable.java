@@ -5,12 +5,17 @@
  */
 package controller.financial_statements;
 
+import com.google.gson.Gson;
+import dal.Financial_StatementDBContext;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Date;
+import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import model.Financial_Statement;
 
 /**
  *
@@ -29,19 +34,53 @@ public class showFSTable extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet showFSTable</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet showFSTable at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+
+        String raw_date = request.getParameter("date");
+        String raw_isAvai = request.getParameter("isAvai");
+        String raw_FID = request.getParameter("FID");
+
+        int FID = Integer.parseInt(raw_FID);
+        int isAvai = Integer.parseInt(raw_isAvai);
+
+        ArrayList<Financial_Statement> flist = new ArrayList<>();
+        Financial_StatementDBContext fdb = new Financial_StatementDBContext();
+
+        if (!raw_date.equals("")) {
+            Date date = Date.valueOf(raw_date);
+            if (isAvai == -1) {
+                if (FID == -1) {
+                    flist = fdb.getFSList_Date_all_all(date);
+                } else {
+                    flist = fdb.getFSList_Date_all_FID(date, FID);
+                }
+            } else {
+                if (FID == -1) {
+                    flist = fdb.getFSList_Date_isAvai_all(date, isAvai);
+                } else {
+                    flist = fdb.getFSList_Date_isAvai_FID(date, isAvai, FID);
+                }
+            }
+        } else {
+            if (isAvai == -1) {
+                if (FID == -1) {
+                    flist = fdb.getFSList();
+                } else {
+                    flist = fdb.getFSList_all_all_FID(FID);
+                }
+            } else {
+                if (FID == -1) {
+                    flist = fdb.getFSList_all_isAvai_all(isAvai);
+                } else {
+                    flist = fdb.getFSList_all_isAvai_FID(isAvai, FID);
+                }
+            }
         }
+
+        Gson gson = new Gson();
+        String jsondata = gson.toJson(flist);
+
+        PrintWriter out = response.getWriter();
+        out.print(jsondata);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

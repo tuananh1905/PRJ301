@@ -5,12 +5,18 @@
  */
 package controller.financial_statements;
 
+import dal.Financial_StatementDBContext;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Date;
+import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import model.Financial_Statement;
+import model.Flock;
+import model.Price;
 
 /**
  *
@@ -70,7 +76,40 @@ public class Insert_Financial_Record extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String 
+        int count_data = Integer.parseInt(request.getParameter("count_data"));
+        
+//        ArrayList<Financial_Statement> fsList = new ArrayList<>();
+        
+        PrintWriter out = response.getWriter();
+        for (int i = 1; i <= count_data; i++) {
+            Financial_StatementDBContext fdb = new Financial_StatementDBContext();
+            String raw_isRevenue = request.getParameter("hidden_isRevenue["+i+"]");
+            String raw_date = request.getParameter("hidden_date["+i+"]");
+            String raw_flockID = request.getParameter("hidden_flockID["+i+"]");
+            String raw_priceID = request.getParameter("hidden_priceID["+i+"]");
+            String raw_quantily = request.getParameter("hidden_quantily["+i+"]");
+            String raw_total = request.getParameter("hidden_total["+i+"]");
+            String raw_decrepsion = request.getParameter("hidden_decrepsion["+i+"]");
+            
+            boolean gender = raw_isRevenue.equals("Revenue");
+            Date date = Date.valueOf(raw_date);
+            int flockID = Integer.parseInt(raw_flockID);
+            Flock f = new Flock();
+            f.setFID(flockID);
+            
+            int priceID = Integer.parseInt(raw_priceID);
+            Price p = new Price();
+            p.setPriceID(priceID);
+            
+            int quantily = Integer.parseInt(raw_quantily);
+            int total = Integer.parseInt(raw_total);
+            
+            Financial_Statement fs = new Financial_Statement(gender, date, f, p, quantily, total, raw_decrepsion);
+            fdb.insertFinancial(fs);
+//            fsList.add(fs);
+//            data += i;
+//            data += "\n    "+raw_isRevenue+" "+raw_date+" "+raw_flockID+" "+raw_priceID+" "+raw_quantily+" "+raw_total+" "+raw_decrepsion;
+        }
     }
 
     /**

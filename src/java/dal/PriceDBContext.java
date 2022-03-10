@@ -157,7 +157,8 @@ public class PriceDBContext extends DBContext {
         }
     }
     
-    public void deletePrice(int pid){
+    public boolean deletePrice(int pid){
+        boolean check = true;
         String sql = "DELETE FROM [Price]\n" +
                     "      WHERE [PriceID] = ?";
         PreparedStatement stm = null;
@@ -166,6 +167,7 @@ public class PriceDBContext extends DBContext {
             stm.setInt(1, pid);
             stm.executeUpdate(); //INSERT UPDATE DELETE
         } catch (SQLException ex) {
+            check = false;
             Logger.getLogger(PriceDBContext.class.getName()).log(Level.SEVERE, null, ex);
         }
         finally
@@ -187,5 +189,6 @@ public class PriceDBContext extends DBContext {
                 }
             }
         }
+        return check;
     }
 }

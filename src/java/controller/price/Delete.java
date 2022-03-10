@@ -32,7 +32,10 @@ public class Delete extends HttpServlet {
             throws ServletException, IOException {
         int pid = Integer.parseInt(request.getParameter("ID"));
         PriceDBContext pd = new PriceDBContext();
-        pd.deletePrice(pid);
+        boolean check = pd.deletePrice(pid);
+        PrintWriter out = response.getWriter();
+//        String c = check ? "true" : "false";
+        out.println(check);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

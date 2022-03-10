@@ -5,6 +5,7 @@
  */
 package controller.price;
 
+import com.google.gson.Gson;
 import dal.PriceDBContext;
 import dal.ProductsDBContext;
 import java.io.IOException;
@@ -85,7 +86,8 @@ public class InsertController extends HttpServlet {
         PriceDBContext pricedb = new PriceDBContext();
         pricedb.insertPrice(pr);
         
-        response.getWriter().println("is already added!");
+//        Gson gson = new Gson();
+//        String jsondata = gson.toJson();
     }
 
     /**

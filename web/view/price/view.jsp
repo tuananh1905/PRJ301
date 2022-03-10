@@ -9,11 +9,10 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <link rel="stylesheet" type="text/css" href="<c:url value = "../css/popupModal.css" />" />
-        <script defer src="<c:url value = "../js/popupModal.js"/>"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-        <script src="../js/takePriceDataFromTable.js"></script>
-        <script src="../js/popupModalDelete.js"></script>
+        <!--        <script src="../js/takePriceDataFromTable.js"></script>-->
+        <link href="../css/bootstrap/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+        <script src="../js/bootstrap/bootstrap.min.js" type="text/javascript"></script>
         <title>JSP Page</title>
     </head>
     <script>
@@ -29,34 +28,35 @@
                 dataType: "json",
                 success: function (jsondata) {
                     var html = "";
-                    html = "<table border=\"1px\" id=\"myTable\">\n"
+                    html = '<table class="table table-striped table-bordered" id="myTable">\n'
                             + "                <tr>\n"
-                            + "                    <td>ID</td>\n"
-                            + "                    <td>Product Name</td>\n"
-                            + "                    <td>Date</td>\n"
-                            + "                    <td>Price</td>\n"
-                            + "                    <td>Decrepsion</td>\n"
-                            + "                    <td>Interactive</td>\n"
+                            + "                    <th>ID</th>\n"
+                            + "                    <th>Product Name</th>\n"
+                            + "                    <th>Date</th>\n"
+                            + "                    <th>Price</th>\n"
+                            + "                    <th>Decrepsion</th>\n"
+                            + "                    <th>Details</th>\n"
+                            + "                    <th>Remove</th>\n"
                             + "                </tr>\n";
                     $.each(jsondata, function (key, item) {
+                        const date = new Date(item['Date']);
+                        var m = (date.getMonth() + 1 < 10) ? '0' + (date.getMonth() + 1) : date.getMonth() + 1;
+                        var d = (date.getDate() < 10) ? '0' + (date.getDate()) : date.getDate();
                         html += "                <tr>\n"
                                 + "                    <td>" + item['PriceID'] + "</td>\n"
                                 + "                    <td>" + item['Product']['Product_name'] + "</td>\n"
-                                + "                    <td>" + item['Date'] + "</td>\n"
+                                + "                    <td>" + date.getFullYear() + '-' + m + '-' + d + "</td>\n"
                                 + "                    <td>" + item['Price'] + "</td>\n"
                                 + "                    <td>" + item['Decrepsion'] + "</td>\n"
-                                + "                    <td>\n"
-                                + "                        <button id=\"edit\" data-modal-target=\"#modal\">Edit</button>\n"
-                                + "                        <button id=\"delete\" data-modal-target=\"#modalDelete\">Delete</button>\n"
-                                + "                        <button id=\"interactive\" data-modal-target=\"#modal\">Information</button>\n"
-                                + "                    </td>\n"
+                                + '                    <td><button type="button" name="view_details" class="btn btn-warning btn-xs view_details" id="" data-bs-toggle="modal" data-bs-target="#ModalPopup">View</button></td>'
+                                + '                    <td><button type="button" name="remove_details" class="btn btn-danger btn-xs remove_details" id="">Remove</button></td>'
                                 + "                </tr>\n";
                     });
                     $('#priceTable').html(html);
-                    $.getScript("../js/popupModal.js");
-                    $.getScript("../js/takePriceDataFromTable.js");
-                    $.getScript("../js/popupModalDelete.js");
-                    console.log(jsondata);
+//                    $.getScript("../js/popupModal.js");
+//                    $.getScript("../js/takePriceDataFromTable.js");
+//                    $.getScript("../js/popupModalDelete.js");
+//                    console.log(jsondata);
                 }
             });
         }
@@ -66,15 +66,131 @@
                 url: $('#submitForm').attr('action'),
                 data: $('#submitForm').serialize(),
                 success: function (data) {
-                    $('#modal').removeClass('active');
-                    $('#overlay').removeClass('active');
+//                    $('#modal').removeClass('active');
+//                    $('#overlay').removeClass('active');
                     submitSearchForm();
-                    $.getScript("../js/popupModal.js");
-                    $.getScript("../js/popupModalDelete.js");
+//                    $.getScript("../js/popupModal.js");
+//                    $.getScript("../js/popupModalDelete.js");
                 }
             });
             return false;
         }
+        $(document).ready(function () {
+            $('#add').click(function () {
+                var date = new Date();
+                var day = date.getDate();
+                var month = date.getMonth() + 1;
+                var year = date.getFullYear();
+                if (month < 10)
+                    month = "0" + month;
+                if (day < 10)
+                    day = "0" + day;
+                var today = year + "-" + month + "-" + day;
+                $('#prdid_s').val('0');
+                $('#date_s').val(today);
+                $('#price_s').val('');
+                $('#decrepsion').val('');
+                $('#save').val('Save');
+            });
+
+            $(document).on('click', '.view_details', function () {
+                var currentRow = $(this).closest("tr");
+                var col1 = currentRow.find("td:eq(0)").text();
+                var col2 = currentRow.find("td:eq(1)").text();
+                var col3 = currentRow.find("td:eq(2)").text();
+                var col4 = currentRow.find("td:eq(3)").text();
+                var col5 = currentRow.find("td:eq(4)").text();
+
+                var productList = document.getElementById("prdid_s");
+                for (var i = 0; i < productList.options.length; i++) {
+                    if (productList.options[i].text === col2) {
+                        $('#prdid_s').val(i.toString()).change();
+                    }
+                }
+                $('#pid_s').val(col1);
+                $('#date_s').val(col3);
+//                document.getElementById("date_s").setAttribute('value', col3);
+                $('#price_s').val(col4);
+                $('#decrepsion_s').val(col5);
+                $('#save').val('Edit');
+            });
+
+            $(document).on('click', '.remove_details', function () {
+                var currentRow = $(this).closest("tr");
+                var col1 = currentRow.find("td:eq(0)").text();
+                var htmlFooter = '';
+                htmlFooter += '<button type="button" id="confirm" class="btn btn-primary" data-bs-dismiss="modal">Confirm</button>';
+                htmlFooter += '<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>';
+
+                $('#modal_notice .modal-title').html("Confirm Navigation!");
+                $('#modal_notice .modal-body').html("Are you sure you want to remove this row data?");
+                $('#modal_notice .modal-footer').html(htmlFooter);
+
+//                $('#modal_notice').show();
+                $('#modal_notice').modal('show');
+                
+                $('#confirm').click(function () {
+                    $('#modal_notice').modal('hide');
+                    $.ajax({
+                        url: 'Delete',
+                        method: 'POST',
+                        data: {ID: col1},
+                        dataType: 'json',
+                        success: function (check) {
+                            if (check) {
+//                                $('#modal_notice').modal('show');
+//                                $('#modal_notice .modal-title').html("Notification!");
+//                                $('#modal_notice .modal-body').html("Delete successful!");
+//                                $('#modal_notice .modal-footer').html('<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>');
+////
+//////                                $('#modal_notice .modal-title').html('Notice');
+//////                                $('#modal_notice .modal-body').html('Add successed!');
+//////                                $('#modal_notice .modal-footer').html('<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>');
+////                                $('#modal_notice').modal('toggle');
+////                                $('#modal_notice').modal('toggle');
+//                                $('#modal_notice').modal('show');
+                                $('#ModalPopup').modal('toggle');
+                                console.log(check);
+                            } else {
+//                                $('#modal_notice .modal-title').html("Notification!");
+//                                $('#modal_notice .modal-body').html("Delete successful!");
+//                                $('#modal_notice .modal-footer').html('<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>');
+//
+//                                $('#modal_notice').modal('toggle');
+//                                $('#modal_notice').modal('toggle');
+                                console.log(check);
+                            }
+                            submitSearchForm();
+                        }
+                    });
+                });
+            });
+
+            $('#addPrice').on('submit', function (event) {
+                event.preventDefault();
+                if ($('#save').val() == 'Save') {
+                    $.ajax({
+                        url: 'Insert',
+                        method: 'POST',
+                        data: $(this).serialize(),
+                        success: function () {
+                            submitSearchForm();
+                            $('#ModalPopup').modal('hide');
+                            $('#modal_notice .modal-title').html('Notice');
+                            $('#modal_notice .modal-body').html('Add successed!');
+                            $('#modal_notice .modal-footer').html('<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>');
+                            $('#modal_notice').modal('show');
+                        }
+                    });
+                }
+//                if ($('#save').val() == 'Edit') {
+//                    $.ajax({
+//                        url: ''
+//                    });
+//                }
+            });
+
+        });
     </script>
     <body>
         <div class="container">
@@ -93,20 +209,23 @@
                     Date: <input type="date" name="date" id="date" onchange="submitSearchForm()"/>
                 </form>
                 <br/>
-                <button id="insert" data-modal-target="#modal">Add</button>
+                <!--                <button id="insert" data-modal-target="#modal">Add</button>-->
+                <div align="right" style="margin-bottom:5px;">
+                    <button type="button" id="add" class="btn btn-success btn-xs" data-bs-toggle="modal" data-bs-target="#ModalPopup">Add</button>
+                </div>
                 <div id="priceTable"></div>
             </div>
         </div>
-        <div class="modal" id="modal">
-            <div class="modal-header">
-                <div class="title">Price Information</div>
-                <button data-close-button class="close-button">&times;</button>
-            </div>
-            <div class="modal-body">
-                <jsp:include page="submitForm.jsp"/>
-            </div>
-        </div>
-        <jsp:include page="../components/modal_Delete.jsp"/>
-        <div id="overlay"></div>
+        <!--        <div class="modal" id="modal">
+                    <div class="modal-header">
+                        <div class="title">Price Information</div>
+                        <button data-close-button class="close-button">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        
+                    </div>
+                </div>-->
+        <jsp:include page="submitForm.jsp"/>
+        <jsp:include page="../components/modal_notice.jsp"/>
     </body>
 </html>

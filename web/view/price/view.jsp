@@ -126,9 +126,8 @@
                 $('#modal_notice .modal-body').html("Are you sure you want to remove this row data?");
                 $('#modal_notice .modal-footer').html(htmlFooter);
 
-//                $('#modal_notice').show();
                 $('#modal_notice').modal('show');
-                
+
                 $('#confirm').click(function () {
                     $('#modal_notice').modal('hide');
                     $.ajax({
@@ -138,27 +137,16 @@
                         dataType: 'json',
                         success: function (check) {
                             if (check) {
-//                                $('#modal_notice').modal('show');
-//                                $('#modal_notice .modal-title').html("Notification!");
-//                                $('#modal_notice .modal-body').html("Delete successful!");
-//                                $('#modal_notice .modal-footer').html('<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>');
-////
-//////                                $('#modal_notice .modal-title').html('Notice');
-//////                                $('#modal_notice .modal-body').html('Add successed!');
-//////                                $('#modal_notice .modal-footer').html('<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>');
-////                                $('#modal_notice').modal('toggle');
-////                                $('#modal_notice').modal('toggle');
-//                                $('#modal_notice').modal('show');
-                                $('#ModalPopup').modal('toggle');
-                                console.log(check);
+                                $('#modal_notice1 .modal-title').html("Notification!");
+                                $('#modal_notice1 .modal-body').html("Delete successful!");
+                                $('#modal_notice1 .modal-footer').html('<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>');
+                                $('#modal_notice1').modal('toggle');
                             } else {
-//                                $('#modal_notice .modal-title').html("Notification!");
-//                                $('#modal_notice .modal-body').html("Delete successful!");
-//                                $('#modal_notice .modal-footer').html('<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>');
-//
-//                                $('#modal_notice').modal('toggle');
-//                                $('#modal_notice').modal('toggle');
-                                console.log(check);
+                                $('#modal_notice1 .modal-title').html("Notification!");
+                                $('#modal_notice1 .modal-body').html("<div>Cant delete this price!</div>");
+                                $('#modal_notice1 .modal-body').append("<div>(Maybe that was used in some FS Record)</div>");
+                                $('#modal_notice1 .modal-footer').html('<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>');
+                                $('#modal_notice1').modal('toggle');
                             }
                             submitSearchForm();
                         }
@@ -182,14 +170,22 @@
                             $('#modal_notice').modal('show');
                         }
                     });
+                } else {
+                    $.ajax({
+                        url: 'Edit',
+                        method: 'POST',
+                        data: $(this).serialize(),
+                        success: function () {
+                            submitSearchForm();
+                            $('#ModalPopup').modal('hide');
+                            $('#modal_notice .modal-title').html('Notice');
+                            $('#modal_notice .modal-body').html('Edit successed!');
+                            $('#modal_notice .modal-footer').html('<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>');
+                            $('#modal_notice').modal('show');
+                        }
+                    });
                 }
-//                if ($('#save').val() == 'Edit') {
-//                    $.ajax({
-//                        url: ''
-//                    });
-//                }
             });
-
         });
     </script>
     <body>
@@ -225,7 +221,9 @@
                         
                     </div>
                 </div>-->
-        <jsp:include page="submitForm.jsp"/>
-        <jsp:include page="../components/modal_notice.jsp"/>
+        <div>
+            <jsp:include page="submitForm.jsp"/>
+            <jsp:include page="../components/modal_notice.jsp"/>
+        </div>
     </body>
 </html>

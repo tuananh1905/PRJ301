@@ -73,8 +73,10 @@ public class Delete_Flock extends HttpServlet {
             throws ServletException, IOException {
         int FID = Integer.parseInt(request.getParameter("ID"));
         FlockDBContext fd = new FlockDBContext();
-        fd.deleteFlock(FID);
-        response.sendRedirect("Search");
+        boolean notice = fd.deleteFlock(FID);
+        PrintWriter out = response.getWriter();
+//        String c = check ? "true" : "false";
+        out.println(notice);
     }
 
     /**

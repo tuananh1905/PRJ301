@@ -48,6 +48,10 @@
         <servlet-name>showFSTable</servlet-name>
         <servlet-class>controller.financial_statements.showFSTable</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>Information_Flock</servlet-name>
+        <servlet-class>controller.flock.Information_Flock</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>InsertController</servlet-name>
         <url-pattern>/Price/Insert</url-pattern>
@@ -67,6 +71,10 @@
     <servlet-mapping>
         <servlet-name>Delete_Flock</servlet-name>
         <url-pattern>/Flock/Delete</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Information_Flock</servlet-name>
+        <url-pattern>/Flock/Information_Flock</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>Insert_Financial_Record</servlet-name>

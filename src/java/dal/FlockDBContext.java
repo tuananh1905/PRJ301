@@ -150,7 +150,8 @@ public class FlockDBContext extends DBContext {
             }
         }
     }
-    public void deleteFlock(int FID){
+    public boolean deleteFlock(int FID){
+        boolean check = true;
         String sql = "DELETE FROM [Flocks]\n" +
                     "      WHERE [FID] = ?";
         PreparedStatement stm = null;
@@ -159,6 +160,7 @@ public class FlockDBContext extends DBContext {
             stm.setInt(1, FID);
             stm.executeUpdate(); //INSERT UPDATE DELETE
         } catch (SQLException ex) {
+            check = false;
             Logger.getLogger(FlockDBContext.class.getName()).log(Level.SEVERE, null, ex);
         }
         finally
@@ -180,5 +182,31 @@ public class FlockDBContext extends DBContext {
                 }
             }
         }
+        return check;
+    }
+    public int getDaysFlock(int id){
+        int days = 0;
+        try {
+            String sql = "SELECT [FID]\n" +
+                    "      ,[FName]\n" +
+                    "      ,[Purchase_date]\n" +
+                    "      ,[Sale_date]\n" +
+                    "	  ,CASE \n" +
+                    "		WHEN [Sale_date] is null then (DATEDIFF(dd, [Purchase_date], GETDATE()) + 1)\n" +
+                    "		ELSE (DATEDIFF(dd, [Purchase_date], [Sale_date]) + 1)\n" +
+                    "		END AS [days]\n" +
+                    "  FROM [Flocks]\n" +
+                    "  WHERE [FID] = ?";
+            PreparedStatement stm = null;
+            stm = connection.prepareStatement(sql);
+            stm.setInt(1, id);
+            ResultSet rs = stm.executeQuery();
+            if(rs.next()){
+                days = rs.getInt("days");
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(FlockDBContext.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return days;
     }
 }

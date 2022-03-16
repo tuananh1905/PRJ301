@@ -29,12 +29,12 @@
                     url: $('#submitForm').attr('action'),
                     data: $('#submitForm').serialize(),
                     success: function (data) {
-                        $('#modal').removeClass('active');
-                        $('#overlay').removeClass('active');
+//                        $('#modal').removeClass('active');
+//                        $('#overlay').removeClass('active');
 //                        $('#tableField').html(data);
                         submitSearchForm();
-                        $.getScript("../js/popupModal.js");
-                        $.getScript("../js/popupModalDelete.js");
+//                        $.getScript("../js/popupModal.js");
+//                        $.getScript("../js/popupModalDelete.js");
                     }
                 });
                 return false;
@@ -72,7 +72,7 @@
 //                                    + "                    </td>\n"
                                     + '                    <td><button type="button" name="view_details" class="btn btn-warning btn-xs view_details" id="" data-bs-toggle="modal" data-bs-target="#ModalPopup">View</button></td>\n'
                                     + '                    <td><button type="button" name="remove_details" class="btn btn-danger btn-xs remove_details" id="">Remove</button></td>\n'
-                                    + '                    <td><button type="button" class="btn btn-info info_flock">Info</button></td>\n'
+                                    + '                    <td><button type="button" class="btn btn-info overview">Overview</button></td>\n'
                                     + "               </tr>\n";
                         });
                         $('#tableField').html(html);
@@ -151,11 +151,18 @@
                                 submitSearchForm();
                                 console.log(check);
                             }
+//                            success: function (error) {
+//                                if (error == 547) {
+//                                    console.log("loiiiii");
+//                                } else {
+//                                    console.log("done");
+//                                }
+//                            }
                         });
                     });
                 });
 
-                $(document).on('click', '.info_flock', function () {
+                $(document).on('click', '.overview', function () {
                     var currentRow = $(this).closest("tr");
                     var col1 = currentRow.find("td:eq(0)").text();
                     $.ajax({
@@ -163,8 +170,17 @@
                         method: 'POST',
                         data: {ID: col1},
                         dataType: 'json',
-                        success: function(dataJson){
-                            console.log(dataJson);
+                        success: function (jsonData) {
+                            var table = '<dl class="row">'
+                                    + '    <dt class="col-8">Days of flock</dt>'
+                                    + '    <dd class="col-4">' + jsonData[2] + '</dd>'
+                                    + '    <dt class="col-8">Revenue</dt>'
+                                    + '    <dd class="col-4">' + jsonData[0] + '</dd>'
+                                    + '    <dt class="col-8">Cost</dt>'
+                                    + '    <dd class="col-4">' + jsonData[1] + '</dd>'
+                                    + '</dl>';
+                            $('#modal_overview .modal-body').html(table);
+                            $('#modal_overview').modal('toggle');
                         }
                     });
                 });
@@ -233,6 +249,7 @@
         <div>
             <jsp:include page="submitForm.jsp"/>
             <jsp:include page="../components/modal_notice.jsp"/>
+            <jsp:include page="../components/modal_overview.jsp"/>
         </div>
     </body>
 </html>

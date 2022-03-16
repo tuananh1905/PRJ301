@@ -50,16 +50,19 @@ public class Information_Flock extends HttpServlet {
             if(fs.isRevenue()) revenue += total;
             else cost += total;
         }
-        String json = "";
-        json = "{revenue:" + revenue + ",cost:" + cost + "}";
+        
+        ArrayList<Integer> list = new ArrayList<>();
+        list.add(revenue);
+        list.add(cost);
+        list.add(days);
+        
         PrintWriter out = response.getWriter();
         
         Gson gson = new Gson();
         
-        String jsondata = gson.toJson(json);
+        String jsondata = gson.toJson(list);
         
         out.print(jsondata);
-//        out.print(revenue + "   " + cost + "    " + days);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

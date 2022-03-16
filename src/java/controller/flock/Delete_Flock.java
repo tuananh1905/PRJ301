@@ -74,6 +74,7 @@ public class Delete_Flock extends HttpServlet {
         int FID = Integer.parseInt(request.getParameter("ID"));
         FlockDBContext fd = new FlockDBContext();
         boolean notice = fd.deleteFlock(FID);
+//        int notice = fd.TestdeleteFlock(FID);
         PrintWriter out = response.getWriter();
 //        String c = check ? "true" : "false";
         out.println(notice);

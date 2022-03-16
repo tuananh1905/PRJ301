@@ -113,7 +113,7 @@ public class Financial_StatementDBContext extends DBContext {
                 
                 f.setPrice(p);
                 f.setQuantily(rs.getInt("Quantily"));
-                f.setTotal(rs.getInt("Total"));
+                f.setTotal(p.getPrice() * rs.getInt("Quantily"));
                 f.setDecrepsion(rs.getString("Decrepsion"));
                 
                 flist.add(f);
@@ -168,7 +168,7 @@ public class Financial_StatementDBContext extends DBContext {
                 
                 f.setPrice(p);
                 f.setQuantily(rs.getInt("Quantily"));
-                f.setTotal(rs.getInt("Total"));
+                f.setTotal(p.getPrice() * rs.getInt("Quantily"));
                 f.setDecrepsion(rs.getString("Decrepsion"));
                 
                 flist.add(f);
@@ -224,7 +224,7 @@ public class Financial_StatementDBContext extends DBContext {
                 
                 f.setPrice(p);
                 f.setQuantily(rs.getInt("Quantily"));
-                f.setTotal(rs.getInt("Total"));
+                f.setTotal(p.getPrice() * rs.getInt("Quantily"));
                 f.setDecrepsion(rs.getString("Decrepsion"));
                 
                 flist.add(f);
@@ -287,7 +287,7 @@ public class Financial_StatementDBContext extends DBContext {
                 
                 f.setPrice(p);
                 f.setQuantily(rs.getInt("Quantily"));
-                f.setTotal(rs.getInt("Total"));
+                f.setTotal(p.getPrice() * rs.getInt("Quantily"));
                 f.setDecrepsion(rs.getString("Decrepsion"));
                 
                 flist.add(f);
@@ -351,7 +351,7 @@ public class Financial_StatementDBContext extends DBContext {
                 
                 f.setPrice(p);
                 f.setQuantily(rs.getInt("Quantily"));
-                f.setTotal(rs.getInt("Total"));
+                f.setTotal(p.getPrice() * rs.getInt("Quantily"));
                 f.setDecrepsion(rs.getString("Decrepsion"));
                 
                 flist.add(f);
@@ -407,7 +407,7 @@ public class Financial_StatementDBContext extends DBContext {
                 
                 f.setPrice(p);
                 f.setQuantily(rs.getInt("Quantily"));
-                f.setTotal(rs.getInt("Total"));
+                f.setTotal(p.getPrice() * rs.getInt("Quantily"));
                 f.setDecrepsion(rs.getString("Decrepsion"));
                 
                 flist.add(f);
@@ -470,7 +470,7 @@ public class Financial_StatementDBContext extends DBContext {
                 
                 f.setPrice(p);
                 f.setQuantily(rs.getInt("Quantily"));
-                f.setTotal(rs.getInt("Total"));
+                f.setTotal(p.getPrice() * rs.getInt("Quantily"));
                 f.setDecrepsion(rs.getString("Decrepsion"));
                 
                 flist.add(f);
@@ -530,7 +530,7 @@ public class Financial_StatementDBContext extends DBContext {
                 
                 f.setPrice(p);
                 f.setQuantily(rs.getInt("Quantily"));
-                f.setTotal(rs.getInt("Total"));
+                f.setTotal(p.getPrice() * rs.getInt("Quantily"));
                 f.setDecrepsion(rs.getString("Decrepsion"));
                 
                 flist.add(f);

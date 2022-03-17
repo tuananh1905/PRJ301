@@ -12,6 +12,7 @@ import java.sql.Date;
  * @author TuanAnh
  */
 public class Financial_Statement {
+    private int FSID;
     private boolean Revenue;
     private Date date;
     private Flock flock;
@@ -33,6 +34,14 @@ public class Financial_Statement {
         this.Decrepsion = Decrepsion;
     }
 
+    public int getFSID() {
+        return FSID;
+    }
+
+    public void setFSID(int FSID) {
+        this.FSID = FSID;
+    }
+    
     public boolean isRevenue() {
         return Revenue;
     }

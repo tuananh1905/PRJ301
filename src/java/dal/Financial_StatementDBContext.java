@@ -24,17 +24,15 @@ import model.Product;
 public class Financial_StatementDBContext extends DBContext {
 
     public void insertFinancial(Financial_Statement fs) {
-        String sql = "INSERT INTO [dbo].[Financial]\n"
+        String sql = "INSERT INTO [Financial]\n"
                     + "           ([IsRevenue]\n"
                     + "           ,[Date]\n"
                     + "           ,[FID]\n"
                     + "           ,[PriceID]\n"
                     + "           ,[Quantily]\n"
-                    + "           ,[Total]\n"
                     + "           ,[Decrepsion])\n"
                     + "     VALUES\n"
                     + "           (?\n"
-                    + "           ,?\n"
                     + "           ,?\n"
                     + "           ,?\n"
                     + "           ,?\n"
@@ -48,8 +46,7 @@ public class Financial_StatementDBContext extends DBContext {
             stm.setInt(3, fs.getFlock().getFID());
             stm.setInt(4, fs.getPrice().getPriceID());
             stm.setInt(5, fs.getQuantily());
-            stm.setInt(6, fs.getTotal());
-            stm.setString(7, fs.getDecrepsion());
+            stm.setString(6, fs.getDecrepsion());
             stm.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(Financial_StatementDBContext.class.getName()).log(Level.SEVERE, null, ex);
@@ -83,7 +80,7 @@ public class Financial_StatementDBContext extends DBContext {
                             "	  ,p.[ProductID]\n" +
                             "	  ,pr.[Product_name]\n" +
                             "      ,f.[Quantily]\n" +
-                            "      ,f.[Total]\n" +
+                            "      ,f.[FSID]\n" +
                             "      ,f.[Decrepsion]\n" +
                             "  FROM [Financial] f join [Flocks] fl on f.FID = fl.FID \n" +
                             "					 join [Price] p on f.PriceID = p.PriceID\n" +
@@ -97,6 +94,8 @@ public class Financial_StatementDBContext extends DBContext {
                 Flock fl = new Flock();
                 Price p = new Price();
                 Product pr = new Product();
+                
+                f.setFSID(rs.getInt("FSID"));
                 
                 f.setRevenue(rs.getBoolean("IsRevenue"));
                 f.setDate(rs.getDate("Date"));
@@ -136,7 +135,7 @@ public class Financial_StatementDBContext extends DBContext {
                         "       ,p.[ProductID]\n" +
                         "       ,pr.[Product_name]\n" +
                         "       ,f.[Quantily]\n" +
-                        "       ,f.[Total]\n" +
+                        "       ,f.[FSID]\n" +
                         "       ,f.[Decrepsion]\n" +
                         "  FROM [Financial] f join [Flocks] fl on f.FID = fl.FID\n" +
                         "                     join [Price] p on f.PriceID = p.PriceID\n" +
@@ -152,6 +151,8 @@ public class Financial_StatementDBContext extends DBContext {
                 Flock fl = new Flock();
                 Price p = new Price();
                 Product pr = new Product();
+                
+                f.setFSID(rs.getInt("FSID"));
                 
                 f.setRevenue(rs.getBoolean("IsRevenue"));
                 f.setDate(rs.getDate("Date"));
@@ -191,7 +192,7 @@ public class Financial_StatementDBContext extends DBContext {
                         "       ,p.[ProductID]\n" +
                         "       ,pr.[Product_name]\n" +
                         "       ,f.[Quantily]\n" +
-                        "       ,f.[Total]\n" +
+                        "       ,f.[FSID]\n" +
                         "       ,f.[Decrepsion]\n" +
                         "  FROM [Financial] f join [Flocks] fl on f.FID = fl.FID\n" +
                         "                     join [Price] p on f.PriceID = p.PriceID\n" +
@@ -208,6 +209,8 @@ public class Financial_StatementDBContext extends DBContext {
                 Flock fl = new Flock();
                 Price p = new Price();
                 Product pr = new Product();
+                
+                f.setFSID(rs.getInt("FSID"));
                 
                 f.setRevenue(rs.getBoolean("IsRevenue"));
                 f.setDate(rs.getDate("Date"));
@@ -248,7 +251,7 @@ public class Financial_StatementDBContext extends DBContext {
                         "       ,p.[ProductID]\n" +
                         "       ,pr.[Product_name]\n" +
                         "       ,f.[Quantily]\n" +
-                        "       ,f.[Total]\n" +
+                        "       ,f.[FSID]\n" +
                         "       ,f.[Decrepsion]\n" +
                         "  FROM [Financial] f join [Flocks] fl on f.FID = fl.FID\n" +
                         "                     join [Price] p on f.PriceID = p.PriceID\n" +
@@ -271,6 +274,8 @@ public class Financial_StatementDBContext extends DBContext {
                 Flock fl = new Flock();
                 Price p = new Price();
                 Product pr = new Product();
+                
+                f.setFSID(rs.getInt("FSID"));
                 
                 f.setRevenue(rs.getBoolean("IsRevenue"));
                 f.setDate(rs.getDate("Date"));
@@ -336,6 +341,8 @@ public class Financial_StatementDBContext extends DBContext {
                 Price p = new Price();
                 Product pr = new Product();
                 
+                f.setFSID(rs.getInt("FSID"));
+                
                 f.setRevenue(rs.getBoolean("IsRevenue"));
                 f.setDate(rs.getDate("Date"));
                 
@@ -375,7 +382,7 @@ public class Financial_StatementDBContext extends DBContext {
                         "       ,p.[ProductID]\n" +
                         "       ,pr.[Product_name]\n" +
                         "       ,f.[Quantily]\n" +
-                        "       ,f.[Total]\n" +
+                        "       ,f.[FSID]\n" +
                         "       ,f.[Decrepsion]\n" +
                         "  FROM [Financial] f join [Flocks] fl on f.FID = fl.FID\n" +
                         "                     join [Price] p on f.PriceID = p.PriceID\n" +
@@ -391,6 +398,8 @@ public class Financial_StatementDBContext extends DBContext {
                 Flock fl = new Flock();
                 Price p = new Price();
                 Product pr = new Product();
+                
+                f.setFSID(rs.getInt("FSID"));
                 
                 f.setRevenue(rs.getBoolean("IsRevenue"));
                 f.setDate(rs.getDate("Date"));
@@ -431,7 +440,7 @@ public class Financial_StatementDBContext extends DBContext {
                         "       ,p.[ProductID]\n" +
                         "       ,pr.[Product_name]\n" +
                         "       ,f.[Quantily]\n" +
-                        "       ,f.[Total]\n" +
+                        "       ,f.[FSID]\n" +
                         "       ,f.[Decrepsion]\n" +
                         "  FROM [Financial] f join [Flocks] fl on f.FID = fl.FID\n" +
                         "                     join [Price] p on f.PriceID = p.PriceID\n" +
@@ -454,6 +463,8 @@ public class Financial_StatementDBContext extends DBContext {
                 Flock fl = new Flock();
                 Price p = new Price();
                 Product pr = new Product();
+                
+                f.setFSID(rs.getInt("FSID"));
                 
                 f.setRevenue(rs.getBoolean("IsRevenue"));
                 f.setDate(rs.getDate("Date"));
@@ -494,7 +505,7 @@ public class Financial_StatementDBContext extends DBContext {
                         "       ,p.[ProductID]\n" +
                         "       ,pr.[Product_name]\n" +
                         "       ,f.[Quantily]\n" +
-                        "       ,f.[Total]\n" +
+                        "       ,f.[FSID]\n" +
                         "       ,f.[Decrepsion]\n" +
                         "  FROM [Financial] f join [Flocks] fl on f.FID = fl.FID\n" +
                         "                     join [Price] p on f.PriceID = p.PriceID\n" +
@@ -514,6 +525,8 @@ public class Financial_StatementDBContext extends DBContext {
                 Flock fl = new Flock();
                 Price p = new Price();
                 Product pr = new Product();
+                
+                f.setFSID(rs.getInt("FSID"));
                 
                 f.setRevenue(rs.getBoolean("IsRevenue"));
                 f.setDate(rs.getDate("Date"));

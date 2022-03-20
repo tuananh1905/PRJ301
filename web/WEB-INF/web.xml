@@ -52,6 +52,14 @@
         <servlet-name>Information_Flock</servlet-name>
         <servlet-class>controller.flock.Information_Flock</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>Edit_Financial_Record</servlet-name>
+        <servlet-class>controller.financial_statements.Edit_Financial_Record</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Delete_Financial_Record</servlet-name>
+        <servlet-class>controller.financial_statements.Delete_Financial_Record</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>InsertController</servlet-name>
         <url-pattern>/Price/Insert</url-pattern>
@@ -103,6 +111,14 @@
     <servlet-mapping>
         <servlet-name>showFSTable</servlet-name>
         <url-pattern>/Financial_Statements/showFSTable</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Edit_Financial_Record</servlet-name>
+        <url-pattern>/Financial_Statements/Edit</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Delete_Financial_Record</servlet-name>
+        <url-pattern>/Financial_Statements/Delete</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

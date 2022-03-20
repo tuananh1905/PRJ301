@@ -134,7 +134,7 @@ public class PriceDBContext extends DBContext {
             stm.setInt(5, pid);
             stm.executeUpdate();
         } catch (SQLException ex) {
-            Logger.getLogger(FlockDBContext.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(PriceDBContext.class.getName()).log(Level.SEVERE, null, ex);
         }
         finally
         {

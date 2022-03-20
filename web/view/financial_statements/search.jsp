@@ -20,6 +20,53 @@
                 submitSearchFlock();
                 submitSearchPrice();
                 submitSearchFlock1();
+                submitSearchFS();
+//                $.ajax({
+//                    type: 'POST',
+//                    url: 'showFSTable',
+//                    data: {
+//                        "date": "",
+//                        "isAvai": "-1",
+//                        "FID": "-1"
+//                    },
+//                    dataType: 'json',
+//                    success: function (jsondata) {
+//                        var html = '';
+//                        html += '<tr>';
+//                        html += '   <th>Status</th>';
+//                        html += '   <th>Date</th>';
+//                        html += '   <th>Flock</th>';
+//                        html += '   <th>Product</th>';
+//                        html += '   <th>Price</th>';
+//                        html += '   <th>Quantily</th>';
+//                        html += '   <th>Total</th>';
+//                        html += '   <th>Decrepsion</th>';
+//                        html += '   <th>Details</th>';
+//                        html += '   <th>Remove</th>';
+//                        html += '</tr>';
+//                        $.each(jsondata, function (key, item) {
+//                            const date = new Date(item['date']);
+//                            var m = (date.getMonth() + 1 < 10) ? '0' + (date.getMonth() + 1) : date.getMonth() + 1;
+//                            var d = (date.getDate() < 10) ? '0' + (date.getDate()) : date.getDate();
+//                            html += '<tr id="' + item["FSID"] + '">';
+//                            html += '   <td>' + item["Revenue"] + '</td>';
+//                            html += '   <td>' + date.getFullYear() + '-' + m + '-' + d + '</td>';
+//                            html += '   <td value="' + item["flock"]["FID"] + '">' + item["flock"]["FName"] + '</td>';
+//                            html += '   <td>' + item["price"]["Product"]["Product_name"] + '</td>';
+//                            html += '   <td value="' + item["price"]["PriceID"] + '">' + item["price"]["Price"] + '</td>';
+//                            html += '   <td>' + item["Quantily"] + '</td>';
+//                            html += '   <td>' + item["Total"] + '</td>';
+//                            html += '   <td>' + item["Decrepsion"] + '</td>';
+//                            html += '   <td><button type="button" name="view_details" class="btn btn-warning btn-xs view_details" id="" data-bs-toggle="modal" data-bs-target="#ModalPopup">View</button></td>';
+//                            html += '   <td><button type="button" name="remove_details" class="btn btn-danger btn-xs remove_details" id="">Remove</button></td>';
+//                            html += '</tr>';
+//                        });
+//                        $('#FSData').html(html);
+//                    }
+//                });
+            };
+
+            function submitSearchFS() {
                 $.ajax({
                     type: 'POST',
                     url: 'showFSTable',
@@ -63,7 +110,7 @@
                         $('#FSData').html(html);
                     }
                 });
-            };
+            }
 
             function submitSearchFlock1() {
                 $.ajax({
@@ -200,9 +247,9 @@
                         }
                     });
                 });
-                
-                $("#save").click(function(){
-                    if($('#save').text() == 'Save'){
+
+                $("#save").click(function () {
+                    if ($('#save').text() == 'Save') {
                         $.ajax({
                             url: 'Insert',
                             method: 'POST',
@@ -216,8 +263,35 @@
                                 "hidden_decrepsion[1]": $('#decrepsion').val(),
                                 "count_data": "1"
                             },
-                            success: function (){
-                                window.alert("done");
+                            success: function () {
+                                submitSearchFS();
+                                $('#ModalPopup').modal('hide');
+                                $('#modal_notice .modal-title').html('Notice');
+                                $('#modal_notice .modal-body').html('Add successed!');
+                                $('#modal_notice .modal-footer').html('<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>');
+                                $('#modal_notice').modal('show');
+                            }
+                        });
+                    } else {
+                        $.ajax({
+                            url: 'Edit',
+                            method: 'POST',
+                            data: {
+                                "isRevenue": $('#isRevenue').is(":checked") ? "Revenue" : "Cost",
+                                "date": $('#date').val(),
+                                "flockID": $('#flockField').val(),
+                                "priceID": $('#priceField').val(),
+                                "quantily": $('#quantily').val(),
+                                "decrepsion": $('#decrepsion').val(),
+                                "ID": $('#FSID').val()
+                            },
+                            success: function () {
+                                submitSearchFS();
+                                $('#ModalPopup').modal('hide');
+                                $('#modal_notice .modal-title').html('Notice');
+                                $('#modal_notice .modal-body').html('Edit successed!');
+                                $('#modal_notice .modal-footer').html('<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>');
+                                $('#modal_notice').modal('show');
                             }
                         });
                     }
@@ -237,6 +311,7 @@
 
                     var check = (status == 'true') ? true : false;
                     $('#save').text('Edit');
+                    $('#FSID').val(row_id);
                     $('#isRevenue').prop('checked', check);
                     $('#date').val(date);
                     $('#searchFlock').val("-1");
@@ -251,7 +326,7 @@
 
                 $(document).on('click', '.remove_details', function () {
                     var currentRow = $(this).closest("tr");
-                    var col1 = currentRow.find("td:eq(0)").text();
+                    var row_id = currentRow.attr("id");
                     var htmlFooter = '';
                     htmlFooter += '<button type="button" id="confirm" class="btn btn-primary" data-bs-dismiss="modal">Confirm</button>';
                     htmlFooter += '<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>';
@@ -267,14 +342,13 @@
                         $.ajax({
                             url: 'Delete',
                             method: 'POST',
-                            data: {ID: col1},
-                            dataType: 'json',
-                            success: function (check) {
+                            data: {ID: row_id},
+                            success: function () {
                                 $('#modal_notice1 .modal-title').html("Notification!");
                                 $('#modal_notice1 .modal-body').html("Delete successful!");
                                 $('#modal_notice1 .modal-footer').html('<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>');
                                 $('#modal_notice1').modal('toggle');
-                                submitSearchForm();
+                                submitSearchFS();
                             }
                         });
                     });

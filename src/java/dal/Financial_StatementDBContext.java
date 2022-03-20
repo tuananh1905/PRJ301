@@ -25,19 +25,19 @@ public class Financial_StatementDBContext extends DBContext {
 
     public void insertFinancial(Financial_Statement fs) {
         String sql = "INSERT INTO [Financial]\n"
-                    + "           ([IsRevenue]\n"
-                    + "           ,[Date]\n"
-                    + "           ,[FID]\n"
-                    + "           ,[PriceID]\n"
-                    + "           ,[Quantily]\n"
-                    + "           ,[Decrepsion])\n"
-                    + "     VALUES\n"
-                    + "           (?\n"
-                    + "           ,?\n"
-                    + "           ,?\n"
-                    + "           ,?\n"
-                    + "           ,?\n"
-                    + "           ,?)";
+                + "           ([IsRevenue]\n"
+                + "           ,[Date]\n"
+                + "           ,[FID]\n"
+                + "           ,[PriceID]\n"
+                + "           ,[Quantily]\n"
+                + "           ,[Decrepsion])\n"
+                + "     VALUES\n"
+                + "           (?\n"
+                + "           ,?\n"
+                + "           ,?\n"
+                + "           ,?\n"
+                + "           ,?\n"
+                + "           ,?)";
         PreparedStatement stm = null;
         try {
             stm = connection.prepareStatement(sql);
@@ -67,25 +67,25 @@ public class Financial_StatementDBContext extends DBContext {
             }
         }
     }
-    
-    public ArrayList<Financial_Statement> getFSList(){
+
+    public ArrayList<Financial_Statement> getFSList() {
         ArrayList<Financial_Statement> flist = new ArrayList<>();
         try {
-            String sql = "SELECT f.[IsRevenue]\n" +
-                            "      ,f.[Date]\n" +
-                            "      ,f.[FID]\n" +
-                            "	  ,fl.[FName]\n" +
-                            "      ,f.[PriceID]\n" +
-                            "      ,p.[Price]\n" +
-                            "	  ,p.[ProductID]\n" +
-                            "	  ,pr.[Product_name]\n" +
-                            "      ,f.[Quantily]\n" +
-                            "      ,f.[FSID]\n" +
-                            "      ,f.[Decrepsion]\n" +
-                            "  FROM [Financial] f join [Flocks] fl on f.FID = fl.FID \n" +
-                            "					 join [Price] p on f.PriceID = p.PriceID\n" +
-                            "					 join [Products] pr on p.ProductID = pr.ProductID\n" +
-                            "  ORDER BY [Date] DESC";
+            String sql = "SELECT f.[IsRevenue]\n"
+                    + "      ,f.[Date]\n"
+                    + "      ,f.[FID]\n"
+                    + "	  ,fl.[FName]\n"
+                    + "      ,f.[PriceID]\n"
+                    + "      ,p.[Price]\n"
+                    + "	  ,p.[ProductID]\n"
+                    + "	  ,pr.[Product_name]\n"
+                    + "      ,f.[Quantily]\n"
+                    + "      ,f.[FSID]\n"
+                    + "      ,f.[Decrepsion]\n"
+                    + "  FROM [Financial] f join [Flocks] fl on f.FID = fl.FID \n"
+                    + "					 join [Price] p on f.PriceID = p.PriceID\n"
+                    + "					 join [Products] pr on p.ProductID = pr.ProductID\n"
+                    + "  ORDER BY [Date] DESC";
             PreparedStatement stm;
             stm = connection.prepareStatement(sql);
             ResultSet rs = stm.executeQuery();
@@ -94,27 +94,27 @@ public class Financial_StatementDBContext extends DBContext {
                 Flock fl = new Flock();
                 Price p = new Price();
                 Product pr = new Product();
-                
+
                 f.setFSID(rs.getInt("FSID"));
-                
+
                 f.setRevenue(rs.getBoolean("IsRevenue"));
                 f.setDate(rs.getDate("Date"));
-                
+
                 fl.setFID(rs.getInt("FID"));
                 fl.setFName(rs.getString("FName"));
                 f.setFlock(fl);
-                
+
                 p.setPriceID(rs.getInt("PriceID"));
                 pr.setProductID(rs.getInt("ProductID"));
                 pr.setProduct_name(rs.getString("Product_name"));
                 p.setProduct(pr);
                 p.setPrice(rs.getInt("Price"));
-                
+
                 f.setPrice(p);
                 f.setQuantily(rs.getInt("Quantily"));
                 f.setTotal(p.getPrice() * rs.getInt("Quantily"));
                 f.setDecrepsion(rs.getString("Decrepsion"));
-                
+
                 flist.add(f);
             }
         } catch (SQLException ex) {
@@ -122,149 +122,94 @@ public class Financial_StatementDBContext extends DBContext {
         }
         return flist;
     }
-     
-    public ArrayList<Financial_Statement> getFSList_Date_all_all(Date date){
-        ArrayList<Financial_Statement> flist = new ArrayList<>();
+
+    public void updateFS(int id, Financial_Statement fs) {
+        String sql = "UPDATE [Financial]\n"
+                + "   SET [IsRevenue] = ?\n"
+                + "      ,[Date] = ?\n"
+                + "      ,[FID] = ?\n"
+                + "      ,[PriceID] = ?\n"
+                + "      ,[Quantily] = ?\n"
+                + "      ,[Decrepsion] = ?\n"
+                + " WHERE FSID = ?";
+        PreparedStatement stm = null;
         try {
-            String sql = "SELECT f.[IsRevenue]\n" +
-                        "       ,f.[Date]\n" +
-                        "       ,f.[FID]\n" +
-                        "       ,fl.[FName]\n" +
-                        "       ,f.[PriceID]\n" +
-                        "       ,p.[Price]\n" +
-                        "       ,p.[ProductID]\n" +
-                        "       ,pr.[Product_name]\n" +
-                        "       ,f.[Quantily]\n" +
-                        "       ,f.[FSID]\n" +
-                        "       ,f.[Decrepsion]\n" +
-                        "  FROM [Financial] f join [Flocks] fl on f.FID = fl.FID\n" +
-                        "                     join [Price] p on f.PriceID = p.PriceID\n" +
-                        "                     join [Products] pr on p.ProductID = pr.ProductID\n" +
-                        "  WHERE f.[Date] = ?\n" +
-                        "  ORDER BY [FName] ASC";
-            PreparedStatement stm;
             stm = connection.prepareStatement(sql);
-            stm.setDate(1, date);
-            ResultSet rs = stm.executeQuery();
-            while (rs.next()) {
-                Financial_Statement f = new Financial_Statement();
-                Flock fl = new Flock();
-                Price p = new Price();
-                Product pr = new Product();
-                
-                f.setFSID(rs.getInt("FSID"));
-                
-                f.setRevenue(rs.getBoolean("IsRevenue"));
-                f.setDate(rs.getDate("Date"));
-                
-                fl.setFID(rs.getInt("FID"));
-                fl.setFName(rs.getString("FName"));
-                f.setFlock(fl);
-                
-                p.setPriceID(rs.getInt("PriceID"));
-                pr.setProductID(rs.getInt("ProductID"));
-                pr.setProduct_name(rs.getString("Product_name"));
-                p.setProduct(pr);
-                p.setPrice(rs.getInt("Price"));
-                
-                f.setPrice(p);
-                f.setQuantily(rs.getInt("Quantily"));
-                f.setTotal(p.getPrice() * rs.getInt("Quantily"));
-                f.setDecrepsion(rs.getString("Decrepsion"));
-                
-                flist.add(f);
-            }
+            stm.setBoolean(1, fs.isRevenue());
+            stm.setDate(2, fs.getDate());
+            stm.setInt(3, fs.getFlock().getFID());
+            stm.setInt(4, fs.getPrice().getPriceID());
+            stm.setInt(5, fs.getQuantily());
+            stm.setString(6, fs.getDecrepsion());
+            stm.setInt(7, id);
+            stm.executeUpdate();
         } catch (SQLException ex) {
-            Logger.getLogger(FlockDBContext.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Financial_StatementDBContext.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            if (stm != null) {
+                try {
+                    stm.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(Financial_StatementDBContext.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(Financial_StatementDBContext.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
         }
-        return flist;
     }
-    
-    public ArrayList<Financial_Statement> getFSList_Date_all_FID(Date date, int FID){
-        ArrayList<Financial_Statement> flist = new ArrayList<>();
+
+    public void deleteFS(int id) {
+        String sql = "DELETE FROM [Financial]\n"
+                + "      WHERE FSID = ?";
+        PreparedStatement stm = null;
         try {
-            String sql = "SELECT f.[IsRevenue]\n" +
-                        "       ,f.[Date]\n" +
-                        "       ,f.[FID]\n" +
-                        "       ,fl.[FName]\n" +
-                        "       ,f.[PriceID]\n" +
-                        "       ,p.[Price]\n" +
-                        "       ,p.[ProductID]\n" +
-                        "       ,pr.[Product_name]\n" +
-                        "       ,f.[Quantily]\n" +
-                        "       ,f.[FSID]\n" +
-                        "       ,f.[Decrepsion]\n" +
-                        "  FROM [Financial] f join [Flocks] fl on f.FID = fl.FID\n" +
-                        "                     join [Price] p on f.PriceID = p.PriceID\n" +
-                        "                     join [Products] pr on p.ProductID = pr.ProductID\n" +
-                        "  WHERE f.[Date] = ? AND f.[FID] = ?\n" +
-                        "  ORDER BY [FName] ASC";
-            PreparedStatement stm;
             stm = connection.prepareStatement(sql);
-            stm.setDate(1, date);
-            stm.setInt(2, FID);
-            ResultSet rs = stm.executeQuery();
-            while (rs.next()) {
-                Financial_Statement f = new Financial_Statement();
-                Flock fl = new Flock();
-                Price p = new Price();
-                Product pr = new Product();
-                
-                f.setFSID(rs.getInt("FSID"));
-                
-                f.setRevenue(rs.getBoolean("IsRevenue"));
-                f.setDate(rs.getDate("Date"));
-                
-                fl.setFID(rs.getInt("FID"));
-                fl.setFName(rs.getString("FName"));
-                f.setFlock(fl);
-                
-                p.setPriceID(rs.getInt("PriceID"));
-                pr.setProductID(rs.getInt("ProductID"));
-                pr.setProduct_name(rs.getString("Product_name"));
-                p.setProduct(pr);
-                p.setPrice(rs.getInt("Price"));
-                
-                f.setPrice(p);
-                f.setQuantily(rs.getInt("Quantily"));
-                f.setTotal(p.getPrice() * rs.getInt("Quantily"));
-                f.setDecrepsion(rs.getString("Decrepsion"));
-                
-                flist.add(f);
-            }
+            stm.setInt(1, id);
+            stm.executeUpdate();
         } catch (SQLException ex) {
-            Logger.getLogger(FlockDBContext.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Financial_StatementDBContext.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            if (stm != null) {
+                try {
+                    stm.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(Financial_StatementDBContext.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(Financial_StatementDBContext.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
         }
-        return flist;
     }
-    
-    public ArrayList<Financial_Statement> getFSList_Date_isAvai_all(Date date, int isAvai){
+
+    public ArrayList<Financial_Statement> getFSList_Date_all_all(Date date) {
         ArrayList<Financial_Statement> flist = new ArrayList<>();
         try {
-            String sql = "SELECT f.[IsRevenue]\n" +
-                        "       ,f.[Date]\n" +
-                        "       ,f.[FID]\n" +
-                        "       ,fl.[FName]\n" +
-                        "       ,fl.[Sale_date]\n" +
-                        "       ,f.[PriceID]\n" +
-                        "       ,p.[Price]\n" +
-                        "       ,p.[ProductID]\n" +
-                        "       ,pr.[Product_name]\n" +
-                        "       ,f.[Quantily]\n" +
-                        "       ,f.[FSID]\n" +
-                        "       ,f.[Decrepsion]\n" +
-                        "  FROM [Financial] f join [Flocks] fl on f.FID = fl.FID\n" +
-                        "                     join [Price] p on f.PriceID = p.PriceID\n" +
-                        "                     join [Products] pr on p.ProductID = pr.ProductID\n" +
-                        "  WHERE f.[Date] = ?\n";
-            if (isAvai == 0) {
-                sql += "  AND (fl.[Sale_date] < getdate() and fl.[Sale_date] is not NULL)";
-                sql += "  ORDER BY [FName] ASC";
-            }
-            if (isAvai == 1) {
-                sql += "  AND (fl.[Sale_date] > getdate() or fl.[Sale_date] is NULL)";
-                sql += "  ORDER BY [FName] ASC";
-            }
+            String sql = "SELECT f.[IsRevenue]\n"
+                    + "       ,f.[Date]\n"
+                    + "       ,f.[FID]\n"
+                    + "       ,fl.[FName]\n"
+                    + "       ,f.[PriceID]\n"
+                    + "       ,p.[Price]\n"
+                    + "       ,p.[ProductID]\n"
+                    + "       ,pr.[Product_name]\n"
+                    + "       ,f.[Quantily]\n"
+                    + "       ,f.[FSID]\n"
+                    + "       ,f.[Decrepsion]\n"
+                    + "  FROM [Financial] f join [Flocks] fl on f.FID = fl.FID\n"
+                    + "                     join [Price] p on f.PriceID = p.PriceID\n"
+                    + "                     join [Products] pr on p.ProductID = pr.ProductID\n"
+                    + "  WHERE f.[Date] = ?\n"
+                    + "  ORDER BY [FName] ASC";
             PreparedStatement stm;
             stm = connection.prepareStatement(sql);
             stm.setDate(1, date);
@@ -274,27 +219,27 @@ public class Financial_StatementDBContext extends DBContext {
                 Flock fl = new Flock();
                 Price p = new Price();
                 Product pr = new Product();
-                
+
                 f.setFSID(rs.getInt("FSID"));
-                
+
                 f.setRevenue(rs.getBoolean("IsRevenue"));
                 f.setDate(rs.getDate("Date"));
-                
+
                 fl.setFID(rs.getInt("FID"));
                 fl.setFName(rs.getString("FName"));
                 f.setFlock(fl);
-                
+
                 p.setPriceID(rs.getInt("PriceID"));
                 pr.setProductID(rs.getInt("ProductID"));
                 pr.setProduct_name(rs.getString("Product_name"));
                 p.setProduct(pr);
                 p.setPrice(rs.getInt("Price"));
-                
+
                 f.setPrice(p);
                 f.setQuantily(rs.getInt("Quantily"));
                 f.setTotal(p.getPrice() * rs.getInt("Quantily"));
                 f.setDecrepsion(rs.getString("Decrepsion"));
-                
+
                 flist.add(f);
             }
         } catch (SQLException ex) {
@@ -302,34 +247,26 @@ public class Financial_StatementDBContext extends DBContext {
         }
         return flist;
     }
-    
-    public ArrayList<Financial_Statement> getFSList_Date_isAvai_FID(Date date, int isAvai, int FID){
+
+    public ArrayList<Financial_Statement> getFSList_Date_all_FID(Date date, int FID) {
         ArrayList<Financial_Statement> flist = new ArrayList<>();
         try {
-            String sql = "SELECT f.[IsRevenue]\n" +
-                        "       ,f.[Date]\n" +
-                        "       ,f.[FID]\n" +
-                        "       ,fl.[FName]\n" +
-                        "       ,fl.[Sale_date]\n" +
-                        "       ,f.[PriceID]\n" +
-                        "       ,p.[Price]\n" +
-                        "       ,p.[ProductID]\n" +
-                        "       ,pr.[Product_name]\n" +
-                        "       ,f.[Quantily]\n" +
-                        "       ,f.[Total]\n" +
-                        "       ,f.[Decrepsion]\n" +
-                        "  FROM [Financial] f join [Flocks] fl on f.FID = fl.FID\n" +
-                        "                     join [Price] p on f.PriceID = p.PriceID\n" +
-                        "                     join [Products] pr on p.ProductID = pr.ProductID\n" +
-                        "  WHERE f.[Date] = ? AND f.[FID] = ?\n";
-            if (isAvai == 0) {
-                sql += "  AND (fl.[Sale_date] < getdate() and fl.[Sale_date] is not NULL)";
-                sql += "  ORDER BY [FName] ASC";
-            }
-            if (isAvai == 1) {
-                sql += "  AND (fl.[Sale_date] > getdate() or fl.[Sale_date] is NULL)";
-                sql += "  ORDER BY [FName] ASC";
-            }
+            String sql = "SELECT f.[IsRevenue]\n"
+                    + "       ,f.[Date]\n"
+                    + "       ,f.[FID]\n"
+                    + "       ,fl.[FName]\n"
+                    + "       ,f.[PriceID]\n"
+                    + "       ,p.[Price]\n"
+                    + "       ,p.[ProductID]\n"
+                    + "       ,pr.[Product_name]\n"
+                    + "       ,f.[Quantily]\n"
+                    + "       ,f.[FSID]\n"
+                    + "       ,f.[Decrepsion]\n"
+                    + "  FROM [Financial] f join [Flocks] fl on f.FID = fl.FID\n"
+                    + "                     join [Price] p on f.PriceID = p.PriceID\n"
+                    + "                     join [Products] pr on p.ProductID = pr.ProductID\n"
+                    + "  WHERE f.[Date] = ? AND f.[FID] = ?\n"
+                    + "  ORDER BY [FName] ASC";
             PreparedStatement stm;
             stm = connection.prepareStatement(sql);
             stm.setDate(1, date);
@@ -340,27 +277,27 @@ public class Financial_StatementDBContext extends DBContext {
                 Flock fl = new Flock();
                 Price p = new Price();
                 Product pr = new Product();
-                
+
                 f.setFSID(rs.getInt("FSID"));
-                
+
                 f.setRevenue(rs.getBoolean("IsRevenue"));
                 f.setDate(rs.getDate("Date"));
-                
+
                 fl.setFID(rs.getInt("FID"));
                 fl.setFName(rs.getString("FName"));
                 f.setFlock(fl);
-                
+
                 p.setPriceID(rs.getInt("PriceID"));
                 pr.setProductID(rs.getInt("ProductID"));
                 pr.setProduct_name(rs.getString("Product_name"));
                 p.setProduct(pr);
                 p.setPrice(rs.getInt("Price"));
-                
+
                 f.setPrice(p);
                 f.setQuantily(rs.getInt("Quantily"));
                 f.setTotal(p.getPrice() * rs.getInt("Quantily"));
                 f.setDecrepsion(rs.getString("Decrepsion"));
-                
+
                 flist.add(f);
             }
         } catch (SQLException ex) {
@@ -368,27 +305,158 @@ public class Financial_StatementDBContext extends DBContext {
         }
         return flist;
     }
-    
-    public ArrayList<Financial_Statement> getFSList_all_all_FID(int FID){
+
+    public ArrayList<Financial_Statement> getFSList_Date_isAvai_all(Date date, int isAvai) {
         ArrayList<Financial_Statement> flist = new ArrayList<>();
         try {
-            String sql = "SELECT f.[IsRevenue]\n" +
-                        "       ,f.[Date]\n" +
-                        "       ,f.[FID]\n" +
-                        "       ,fl.[FName]\n" +
-                        "	   ,fl.[Sale_date]\n" +
-                        "       ,f.[PriceID]\n" +
-                        "       ,p.[Price]\n" +
-                        "       ,p.[ProductID]\n" +
-                        "       ,pr.[Product_name]\n" +
-                        "       ,f.[Quantily]\n" +
-                        "       ,f.[FSID]\n" +
-                        "       ,f.[Decrepsion]\n" +
-                        "  FROM [Financial] f join [Flocks] fl on f.FID = fl.FID\n" +
-                        "                     join [Price] p on f.PriceID = p.PriceID\n" +
-                        "                     join [Products] pr on p.ProductID = pr.ProductID\n" +
-                        "  WHERE f.[FID] = ?\n" +
-                        "  ORDER BY [FName] ASC";
+            String sql = "SELECT f.[IsRevenue]\n"
+                    + "       ,f.[Date]\n"
+                    + "       ,f.[FID]\n"
+                    + "       ,fl.[FName]\n"
+                    + "       ,fl.[Sale_date]\n"
+                    + "       ,f.[PriceID]\n"
+                    + "       ,p.[Price]\n"
+                    + "       ,p.[ProductID]\n"
+                    + "       ,pr.[Product_name]\n"
+                    + "       ,f.[Quantily]\n"
+                    + "       ,f.[FSID]\n"
+                    + "       ,f.[Decrepsion]\n"
+                    + "  FROM [Financial] f join [Flocks] fl on f.FID = fl.FID\n"
+                    + "                     join [Price] p on f.PriceID = p.PriceID\n"
+                    + "                     join [Products] pr on p.ProductID = pr.ProductID\n"
+                    + "  WHERE f.[Date] = ?\n";
+            if (isAvai == 0) {
+                sql += "  AND (fl.[Sale_date] < getdate() and fl.[Sale_date] is not NULL)";
+                sql += "  ORDER BY [FName] ASC";
+            }
+            if (isAvai == 1) {
+                sql += "  AND (fl.[Sale_date] > getdate() or fl.[Sale_date] is NULL)";
+                sql += "  ORDER BY [FName] ASC";
+            }
+            PreparedStatement stm;
+            stm = connection.prepareStatement(sql);
+            stm.setDate(1, date);
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                Financial_Statement f = new Financial_Statement();
+                Flock fl = new Flock();
+                Price p = new Price();
+                Product pr = new Product();
+
+                f.setFSID(rs.getInt("FSID"));
+
+                f.setRevenue(rs.getBoolean("IsRevenue"));
+                f.setDate(rs.getDate("Date"));
+
+                fl.setFID(rs.getInt("FID"));
+                fl.setFName(rs.getString("FName"));
+                f.setFlock(fl);
+
+                p.setPriceID(rs.getInt("PriceID"));
+                pr.setProductID(rs.getInt("ProductID"));
+                pr.setProduct_name(rs.getString("Product_name"));
+                p.setProduct(pr);
+                p.setPrice(rs.getInt("Price"));
+
+                f.setPrice(p);
+                f.setQuantily(rs.getInt("Quantily"));
+                f.setTotal(p.getPrice() * rs.getInt("Quantily"));
+                f.setDecrepsion(rs.getString("Decrepsion"));
+
+                flist.add(f);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(FlockDBContext.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return flist;
+    }
+
+    public ArrayList<Financial_Statement> getFSList_Date_isAvai_FID(Date date, int isAvai, int FID) {
+        ArrayList<Financial_Statement> flist = new ArrayList<>();
+        try {
+            String sql = "SELECT f.[IsRevenue]\n"
+                    + "       ,f.[Date]\n"
+                    + "       ,f.[FID]\n"
+                    + "       ,fl.[FName]\n"
+                    + "       ,fl.[Sale_date]\n"
+                    + "       ,f.[PriceID]\n"
+                    + "       ,p.[Price]\n"
+                    + "       ,p.[ProductID]\n"
+                    + "       ,pr.[Product_name]\n"
+                    + "       ,f.[Quantily]\n"
+                    + "       ,f.[Total]\n"
+                    + "       ,f.[Decrepsion]\n"
+                    + "  FROM [Financial] f join [Flocks] fl on f.FID = fl.FID\n"
+                    + "                     join [Price] p on f.PriceID = p.PriceID\n"
+                    + "                     join [Products] pr on p.ProductID = pr.ProductID\n"
+                    + "  WHERE f.[Date] = ? AND f.[FID] = ?\n";
+            if (isAvai == 0) {
+                sql += "  AND (fl.[Sale_date] < getdate() and fl.[Sale_date] is not NULL)";
+                sql += "  ORDER BY [FName] ASC";
+            }
+            if (isAvai == 1) {
+                sql += "  AND (fl.[Sale_date] > getdate() or fl.[Sale_date] is NULL)";
+                sql += "  ORDER BY [FName] ASC";
+            }
+            PreparedStatement stm;
+            stm = connection.prepareStatement(sql);
+            stm.setDate(1, date);
+            stm.setInt(2, FID);
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                Financial_Statement f = new Financial_Statement();
+                Flock fl = new Flock();
+                Price p = new Price();
+                Product pr = new Product();
+
+                f.setFSID(rs.getInt("FSID"));
+
+                f.setRevenue(rs.getBoolean("IsRevenue"));
+                f.setDate(rs.getDate("Date"));
+
+                fl.setFID(rs.getInt("FID"));
+                fl.setFName(rs.getString("FName"));
+                f.setFlock(fl);
+
+                p.setPriceID(rs.getInt("PriceID"));
+                pr.setProductID(rs.getInt("ProductID"));
+                pr.setProduct_name(rs.getString("Product_name"));
+                p.setProduct(pr);
+                p.setPrice(rs.getInt("Price"));
+
+                f.setPrice(p);
+                f.setQuantily(rs.getInt("Quantily"));
+                f.setTotal(p.getPrice() * rs.getInt("Quantily"));
+                f.setDecrepsion(rs.getString("Decrepsion"));
+
+                flist.add(f);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(FlockDBContext.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return flist;
+    }
+
+    public ArrayList<Financial_Statement> getFSList_all_all_FID(int FID) {
+        ArrayList<Financial_Statement> flist = new ArrayList<>();
+        try {
+            String sql = "SELECT f.[IsRevenue]\n"
+                    + "       ,f.[Date]\n"
+                    + "       ,f.[FID]\n"
+                    + "       ,fl.[FName]\n"
+                    + "	   ,fl.[Sale_date]\n"
+                    + "       ,f.[PriceID]\n"
+                    + "       ,p.[Price]\n"
+                    + "       ,p.[ProductID]\n"
+                    + "       ,pr.[Product_name]\n"
+                    + "       ,f.[Quantily]\n"
+                    + "       ,f.[FSID]\n"
+                    + "       ,f.[Decrepsion]\n"
+                    + "  FROM [Financial] f join [Flocks] fl on f.FID = fl.FID\n"
+                    + "                     join [Price] p on f.PriceID = p.PriceID\n"
+                    + "                     join [Products] pr on p.ProductID = pr.ProductID\n"
+                    + "  WHERE f.[FID] = ?\n"
+                    + "  ORDER BY [FName] ASC";
             PreparedStatement stm;
             stm = connection.prepareStatement(sql);
             stm.setInt(1, FID);
@@ -398,27 +466,27 @@ public class Financial_StatementDBContext extends DBContext {
                 Flock fl = new Flock();
                 Price p = new Price();
                 Product pr = new Product();
-                
+
                 f.setFSID(rs.getInt("FSID"));
-                
+
                 f.setRevenue(rs.getBoolean("IsRevenue"));
                 f.setDate(rs.getDate("Date"));
-                
+
                 fl.setFID(rs.getInt("FID"));
                 fl.setFName(rs.getString("FName"));
                 f.setFlock(fl);
-                
+
                 p.setPriceID(rs.getInt("PriceID"));
                 pr.setProductID(rs.getInt("ProductID"));
                 pr.setProduct_name(rs.getString("Product_name"));
                 p.setProduct(pr);
                 p.setPrice(rs.getInt("Price"));
-                
+
                 f.setPrice(p);
                 f.setQuantily(rs.getInt("Quantily"));
                 f.setTotal(p.getPrice() * rs.getInt("Quantily"));
                 f.setDecrepsion(rs.getString("Decrepsion"));
-                
+
                 flist.add(f);
             }
         } catch (SQLException ex) {
@@ -426,26 +494,26 @@ public class Financial_StatementDBContext extends DBContext {
         }
         return flist;
     }
-    
-    public ArrayList<Financial_Statement> getFSList_all_isAvai_FID(int isAvai, int FID){
+
+    public ArrayList<Financial_Statement> getFSList_all_isAvai_FID(int isAvai, int FID) {
         ArrayList<Financial_Statement> flist = new ArrayList<>();
         try {
-            String sql = "SELECT f.[IsRevenue]\n" +
-                        "       ,f.[Date]\n" +
-                        "       ,f.[FID]\n" +
-                        "       ,fl.[FName]\n" +
-                        "	   ,fl.[Sale_date]\n" +
-                        "       ,f.[PriceID]\n" +
-                        "       ,p.[Price]\n" +
-                        "       ,p.[ProductID]\n" +
-                        "       ,pr.[Product_name]\n" +
-                        "       ,f.[Quantily]\n" +
-                        "       ,f.[FSID]\n" +
-                        "       ,f.[Decrepsion]\n" +
-                        "  FROM [Financial] f join [Flocks] fl on f.FID = fl.FID\n" +
-                        "                     join [Price] p on f.PriceID = p.PriceID\n" +
-                        "                     join [Products] pr on p.ProductID = pr.ProductID\n" +
-                        "  WHERE f.[FID] = ?\n";
+            String sql = "SELECT f.[IsRevenue]\n"
+                    + "       ,f.[Date]\n"
+                    + "       ,f.[FID]\n"
+                    + "       ,fl.[FName]\n"
+                    + "	   ,fl.[Sale_date]\n"
+                    + "       ,f.[PriceID]\n"
+                    + "       ,p.[Price]\n"
+                    + "       ,p.[ProductID]\n"
+                    + "       ,pr.[Product_name]\n"
+                    + "       ,f.[Quantily]\n"
+                    + "       ,f.[FSID]\n"
+                    + "       ,f.[Decrepsion]\n"
+                    + "  FROM [Financial] f join [Flocks] fl on f.FID = fl.FID\n"
+                    + "                     join [Price] p on f.PriceID = p.PriceID\n"
+                    + "                     join [Products] pr on p.ProductID = pr.ProductID\n"
+                    + "  WHERE f.[FID] = ?\n";
             if (isAvai == 0) {
                 sql += "  AND (fl.[Sale_date] < getdate() and fl.[Sale_date] is not NULL)";
                 sql += "  ORDER BY [FName] ASC";
@@ -463,27 +531,27 @@ public class Financial_StatementDBContext extends DBContext {
                 Flock fl = new Flock();
                 Price p = new Price();
                 Product pr = new Product();
-                
+
                 f.setFSID(rs.getInt("FSID"));
-                
+
                 f.setRevenue(rs.getBoolean("IsRevenue"));
                 f.setDate(rs.getDate("Date"));
-                
+
                 fl.setFID(rs.getInt("FID"));
                 fl.setFName(rs.getString("FName"));
                 f.setFlock(fl);
-                
+
                 p.setPriceID(rs.getInt("PriceID"));
                 pr.setProductID(rs.getInt("ProductID"));
                 pr.setProduct_name(rs.getString("Product_name"));
                 p.setProduct(pr);
                 p.setPrice(rs.getInt("Price"));
-                
+
                 f.setPrice(p);
                 f.setQuantily(rs.getInt("Quantily"));
                 f.setTotal(p.getPrice() * rs.getInt("Quantily"));
                 f.setDecrepsion(rs.getString("Decrepsion"));
-                
+
                 flist.add(f);
             }
         } catch (SQLException ex) {
@@ -491,25 +559,25 @@ public class Financial_StatementDBContext extends DBContext {
         }
         return flist;
     }
-    
-    public ArrayList<Financial_Statement> getFSList_all_isAvai_all(int isAvai){
+
+    public ArrayList<Financial_Statement> getFSList_all_isAvai_all(int isAvai) {
         ArrayList<Financial_Statement> flist = new ArrayList<>();
         try {
-            String sql = "SELECT f.[IsRevenue]\n" +
-                        "       ,f.[Date]\n" +
-                        "       ,f.[FID]\n" +
-                        "       ,fl.[FName]\n" +
-                        "	   ,fl.[Sale_date]\n" +
-                        "       ,f.[PriceID]\n" +
-                        "       ,p.[Price]\n" +
-                        "       ,p.[ProductID]\n" +
-                        "       ,pr.[Product_name]\n" +
-                        "       ,f.[Quantily]\n" +
-                        "       ,f.[FSID]\n" +
-                        "       ,f.[Decrepsion]\n" +
-                        "  FROM [Financial] f join [Flocks] fl on f.FID = fl.FID\n" +
-                        "                     join [Price] p on f.PriceID = p.PriceID\n" +
-                        "                     join [Products] pr on p.ProductID = pr.ProductID\n";
+            String sql = "SELECT f.[IsRevenue]\n"
+                    + "       ,f.[Date]\n"
+                    + "       ,f.[FID]\n"
+                    + "       ,fl.[FName]\n"
+                    + "	   ,fl.[Sale_date]\n"
+                    + "       ,f.[PriceID]\n"
+                    + "       ,p.[Price]\n"
+                    + "       ,p.[ProductID]\n"
+                    + "       ,pr.[Product_name]\n"
+                    + "       ,f.[Quantily]\n"
+                    + "       ,f.[FSID]\n"
+                    + "       ,f.[Decrepsion]\n"
+                    + "  FROM [Financial] f join [Flocks] fl on f.FID = fl.FID\n"
+                    + "                     join [Price] p on f.PriceID = p.PriceID\n"
+                    + "                     join [Products] pr on p.ProductID = pr.ProductID\n";
             if (isAvai == 0) {
                 sql += "  WHERE (fl.[Sale_date] < getdate() and fl.[Sale_date] is not NULL)";
             }
@@ -525,27 +593,27 @@ public class Financial_StatementDBContext extends DBContext {
                 Flock fl = new Flock();
                 Price p = new Price();
                 Product pr = new Product();
-                
+
                 f.setFSID(rs.getInt("FSID"));
-                
+
                 f.setRevenue(rs.getBoolean("IsRevenue"));
                 f.setDate(rs.getDate("Date"));
-                
+
                 fl.setFID(rs.getInt("FID"));
                 fl.setFName(rs.getString("FName"));
                 f.setFlock(fl);
-                
+
                 p.setPriceID(rs.getInt("PriceID"));
                 pr.setProductID(rs.getInt("ProductID"));
                 pr.setProduct_name(rs.getString("Product_name"));
                 p.setProduct(pr);
                 p.setPrice(rs.getInt("Price"));
-                
+
                 f.setPrice(p);
                 f.setQuantily(rs.getInt("Quantily"));
                 f.setTotal(p.getPrice() * rs.getInt("Quantily"));
                 f.setDecrepsion(rs.getString("Decrepsion"));
-                
+
                 flist.add(f);
             }
         } catch (SQLException ex) {

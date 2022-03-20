@@ -13,6 +13,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
+                <input hidden type="text" name="FSID" id="FSID"/>
                 <div class="form-group form-check form-switch">
                     <label>Is Revenue</label>
                     <input class="form-check-input" type="checkbox" role="switch" id="isRevenue" name="isRevenue">

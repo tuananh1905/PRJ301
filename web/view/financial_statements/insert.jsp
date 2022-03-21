@@ -272,6 +272,7 @@
         </script>
     </head>
     <body>
+        <jsp:include page="../components/navbar.jsp"/>
         <div class="container">
             <div align="right" style="margin-bottom:5px;">
                 <button type="button" id="check" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#modal_notice">Check</button>

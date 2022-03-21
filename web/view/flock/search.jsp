@@ -18,7 +18,7 @@
                 <script src="../js/takeFlockDataFromTable"></script>-->
         <link href="../css/bootstrap/bootstrap.min.css" rel="stylesheet" type="text/css"/>
         <script src="../js/bootstrap/bootstrap.min.js" type="text/javascript"></script>
-
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <script>
             window.onload = function () {
                 submitSearchForm();
@@ -39,6 +39,22 @@
                 });
                 return false;
             }
+
+            function getListChartData(_fs, _date) {
+                var data = [];
+                _date.forEach(function (elem) {
+                    if (_fs.length > 0) {
+                        if (elem === _fs[0].Decrepsion) {
+                            data.push(_fs[0].Total);
+                            _fs.shift();
+                        }else{
+                            data.push('');
+                        }
+                    }
+                });
+                return data;
+            }
+
             function submitSearchForm() {
                 $.ajax({
                     type: 'POST',
@@ -165,19 +181,58 @@
                 $(document).on('click', '.overview', function () {
                     var currentRow = $(this).closest("tr");
                     var col1 = currentRow.find("td:eq(0)").text();
+                    $('#chart').html('<canvas id="myChart" style="width:100%;max-width:100%"></canvas>');
                     $.ajax({
                         url: 'Information_Flock',
                         method: 'POST',
                         data: {ID: col1},
                         dataType: 'json',
                         success: function (jsonData) {
+                            var data = [];
+                            jsonData[1].forEach(function (elem) {
+                                data.push(elem.Total);
+                            });
+                            var _arrayR = getListChartData(jsonData[1], jsonData[3]);
+                            var _arrayC = getListChartData(jsonData[2], jsonData[3]);
+                            const ctx = document.getElementById('myChart').getContext('2d');
+                            const myChart = new Chart(ctx, {
+                                type: 'line',
+                                data: {
+                                    labels: jsonData[3],
+                                    datasets: [
+                                        {
+                                            label: 'Revenue',
+                                            data: _arrayR,
+                                            backgroundColor: 'rgb(0, 150, 255)',
+                                            borderColor: 'rgb(0, 150, 255)',
+                                            borderWidth: 1
+                                        },
+                                        {
+                                            label: 'Cost',
+                                            data: _arrayC,
+                                            backgroundColor: 'rgb(255, 0, 0)',
+                                            borderColor: 'rgb(255, 0, 0)',
+                                            borderWidth: 1
+                                        }
+                                    ]
+                                },
+                                options: {
+                                    scales: {
+                                        y: {
+                                            beginAtZero: true
+                                        }
+                                    },
+                                    spanGaps: true
+                                }
+                            });
+
                             var table = '<dl class="row">'
                                     + '    <dt class="col-8">Days of flock</dt>'
-                                    + '    <dd class="col-4">' + jsonData[2] + '</dd>'
-                                    + '    <dt class="col-8">Revenue</dt>'
-                                    + '    <dd class="col-4">' + jsonData[0] + '</dd>'
-                                    + '    <dt class="col-8">Cost</dt>'
-                                    + '    <dd class="col-4">' + jsonData[1] + '</dd>'
+                                    + '    <dd class="col-4">' + jsonData[0][2] + '</dd>'
+                                    + '    <dt class="col-8">Total Revenue</dt>'
+                                    + '    <dd class="col-4">' + jsonData[0][0] + '</dd>'
+                                    + '    <dt class="col-8">Total Cost</dt>'
+                                    + '    <dd class="col-4">' + jsonData[0][1] + '</dd>'
                                     + '</dl>';
                             $('#modal_overview .modal-body').html(table);
                             $('#modal_overview').modal('toggle');
@@ -221,6 +276,7 @@
         </script>
     </head>
     <body>
+        <jsp:include page="../components/navbar.jsp"/>
         <div class="container">
             <form id="searchForm" method="POST" action="Search">
                 Flock name: <select name="isAvai" onchange="submitSearchForm();">

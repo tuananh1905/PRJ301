@@ -55,14 +55,14 @@ public class Financial_StatementDBContext extends DBContext {
                 try {
                     stm.close();
                 } catch (SQLException ex) {
-                    Logger.getLogger(PriceDBContext.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(Financial_StatementDBContext.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
             if (connection != null) {
                 try {
                     connection.close();
                 } catch (SQLException ex) {
-                    Logger.getLogger(PriceDBContext.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(Financial_StatementDBContext.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         }
@@ -118,7 +118,7 @@ public class Financial_StatementDBContext extends DBContext {
                 flist.add(f);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(FlockDBContext.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Financial_StatementDBContext.class.getName()).log(Level.SEVERE, null, ex);
         }
         return flist;
     }
@@ -190,6 +190,33 @@ public class Financial_StatementDBContext extends DBContext {
             }
         }
     }
+    
+    public ArrayList<Financial_Statement> getTotalFSListDay(int isRevenue, int id){
+        ArrayList<Financial_Statement> l = new ArrayList<>();
+        try {
+            String sql = "SELECT p.[Date]\n" +
+                        "	  , sum(pr.Price*p.Quantily) as [total]\n" +
+                        "  FROM [Financial] p join [Price] pr on p.PriceID = pr.PriceID\n" +
+                        "  where [IsRevenue] = ? and [FID] = ?\n" +
+                        "  group by p.[Date]";
+            PreparedStatement stm;
+            stm = connection.prepareStatement(sql);
+            stm.setInt(1, isRevenue);
+            stm.setInt(2, id);
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                Financial_Statement f = new Financial_Statement();
+                f.setDate(rs.getDate("Date"));
+                f.setDecrepsion(rs.getDate("Date").toString());
+                f.setTotal(rs.getInt("total"));
+
+                l.add(f);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Financial_StatementDBContext.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return l;
+    }
 
     public ArrayList<Financial_Statement> getFSList_Date_all_all(Date date) {
         ArrayList<Financial_Statement> flist = new ArrayList<>();
@@ -243,7 +270,7 @@ public class Financial_StatementDBContext extends DBContext {
                 flist.add(f);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(FlockDBContext.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Financial_StatementDBContext.class.getName()).log(Level.SEVERE, null, ex);
         }
         return flist;
     }
@@ -301,7 +328,7 @@ public class Financial_StatementDBContext extends DBContext {
                 flist.add(f);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(FlockDBContext.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Financial_StatementDBContext.class.getName()).log(Level.SEVERE, null, ex);
         }
         return flist;
     }
@@ -366,7 +393,7 @@ public class Financial_StatementDBContext extends DBContext {
                 flist.add(f);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(FlockDBContext.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Financial_StatementDBContext.class.getName()).log(Level.SEVERE, null, ex);
         }
         return flist;
     }
@@ -432,7 +459,7 @@ public class Financial_StatementDBContext extends DBContext {
                 flist.add(f);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(FlockDBContext.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Financial_StatementDBContext.class.getName()).log(Level.SEVERE, null, ex);
         }
         return flist;
     }
@@ -490,7 +517,7 @@ public class Financial_StatementDBContext extends DBContext {
                 flist.add(f);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(FlockDBContext.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Financial_StatementDBContext.class.getName()).log(Level.SEVERE, null, ex);
         }
         return flist;
     }
@@ -555,7 +582,7 @@ public class Financial_StatementDBContext extends DBContext {
                 flist.add(f);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(FlockDBContext.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Financial_StatementDBContext.class.getName()).log(Level.SEVERE, null, ex);
         }
         return flist;
     }
@@ -617,7 +644,7 @@ public class Financial_StatementDBContext extends DBContext {
                 flist.add(f);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(FlockDBContext.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Financial_StatementDBContext.class.getName()).log(Level.SEVERE, null, ex);
         }
         return flist;
     }

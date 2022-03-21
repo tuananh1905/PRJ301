@@ -12,6 +12,7 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
         <!--        <script src="../js/takePriceDataFromTable.js"></script>-->
         <link href="../css/bootstrap/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+        <link href="../css/fontawesome.min.css" rel="stylesheet" type="text/css"/>
         <script src="../js/bootstrap/bootstrap.min.js" type="text/javascript"></script>
         <title>JSP Page</title>
     </head>
@@ -189,6 +190,7 @@
         });
     </script>
     <body>
+        <jsp:include page="../components/navbar.jsp"/>
         <div class="container">
             <div id="priceField" >
                 <form action="showPriceTable" id="searchForm">

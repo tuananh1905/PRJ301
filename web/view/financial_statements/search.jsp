@@ -21,49 +21,6 @@
                 submitSearchPrice();
                 submitSearchFlock1();
                 submitSearchFS();
-//                $.ajax({
-//                    type: 'POST',
-//                    url: 'showFSTable',
-//                    data: {
-//                        "date": "",
-//                        "isAvai": "-1",
-//                        "FID": "-1"
-//                    },
-//                    dataType: 'json',
-//                    success: function (jsondata) {
-//                        var html = '';
-//                        html += '<tr>';
-//                        html += '   <th>Status</th>';
-//                        html += '   <th>Date</th>';
-//                        html += '   <th>Flock</th>';
-//                        html += '   <th>Product</th>';
-//                        html += '   <th>Price</th>';
-//                        html += '   <th>Quantily</th>';
-//                        html += '   <th>Total</th>';
-//                        html += '   <th>Decrepsion</th>';
-//                        html += '   <th>Details</th>';
-//                        html += '   <th>Remove</th>';
-//                        html += '</tr>';
-//                        $.each(jsondata, function (key, item) {
-//                            const date = new Date(item['date']);
-//                            var m = (date.getMonth() + 1 < 10) ? '0' + (date.getMonth() + 1) : date.getMonth() + 1;
-//                            var d = (date.getDate() < 10) ? '0' + (date.getDate()) : date.getDate();
-//                            html += '<tr id="' + item["FSID"] + '">';
-//                            html += '   <td>' + item["Revenue"] + '</td>';
-//                            html += '   <td>' + date.getFullYear() + '-' + m + '-' + d + '</td>';
-//                            html += '   <td value="' + item["flock"]["FID"] + '">' + item["flock"]["FName"] + '</td>';
-//                            html += '   <td>' + item["price"]["Product"]["Product_name"] + '</td>';
-//                            html += '   <td value="' + item["price"]["PriceID"] + '">' + item["price"]["Price"] + '</td>';
-//                            html += '   <td>' + item["Quantily"] + '</td>';
-//                            html += '   <td>' + item["Total"] + '</td>';
-//                            html += '   <td>' + item["Decrepsion"] + '</td>';
-//                            html += '   <td><button type="button" name="view_details" class="btn btn-warning btn-xs view_details" id="" data-bs-toggle="modal" data-bs-target="#ModalPopup">View</button></td>';
-//                            html += '   <td><button type="button" name="remove_details" class="btn btn-danger btn-xs remove_details" id="">Remove</button></td>';
-//                            html += '</tr>';
-//                        });
-//                        $('#FSData').html(html);
-//                    }
-//                });
             };
 
             function submitSearchFS() {
@@ -94,8 +51,13 @@
                             const date = new Date(item['date']);
                             var m = (date.getMonth() + 1 < 10) ? '0' + (date.getMonth() + 1) : date.getMonth() + 1;
                             var d = (date.getDate() < 10) ? '0' + (date.getDate()) : date.getDate();
-                            html += '<tr id="' + item["FSID"] + '">';
-                            html += '   <td>' + item["Revenue"] + '</td>';
+                            if(item['Revenue']==true){
+                                html += '<tr class="table-info" id="' + item["FSID"] + '">';
+                            }else{
+                                html += '<tr class="table-danger" id="' + item["FSID"] + '">';
+                            }
+                            var isRevnue = (item["Revenue"]==true) ? 'Revenue' : 'Cost';
+                            html += '   <td>' + isRevnue + '</td>';
                             html += '   <td>' + date.getFullYear() + '-' + m + '-' + d + '</td>';
                             html += '   <td value="' + item["flock"]["FID"] + '">' + item["flock"]["FName"] + '</td>';
                             html += '   <td>' + item["price"]["Product"]["Product_name"] + '</td>';
@@ -230,8 +192,13 @@
                                 const date = new Date(item['date']);
                                 var m = (date.getMonth() + 1 < 10) ? '0' + (date.getMonth() + 1) : date.getMonth() + 1;
                                 var d = (date.getDate() < 10) ? '0' + (date.getDate()) : date.getDate();
-                                html += '<tr id="' + item["FSID"] + '">';
-                                html += '   <td>' + item["Revenue"] + '</td>';
+                                if(item['Revenue']==true){
+                                    html += '<tr class="table-info" id="' + item["FSID"] + '">';
+                                }else{
+                                    html += '<tr class="table-danger" id="' + item["FSID"] + '">';
+                                }
+                                var isRevnue = (item["Revenue"]==true) ? 'Revenue' : 'Cost';
+                                html += '   <td>' + isRevnue + '</td>';
                                 html += '   <td>' + date.getFullYear() + '-' + m + '-' + d + '</td>';
                                 html += '   <td value="' + item["flock"]["FID"] + '">' + item["flock"]["FName"] + '</td>';
                                 html += '   <td>' + item["price"]["Product"]["Product_name"] + '</td>';
@@ -254,7 +221,7 @@
                             url: 'Insert',
                             method: 'POST',
                             data: {
-                                "hidden_isRevenue[1]": $('#isRevenue').val(),
+                                "hidden_isRevenue[1]": ($('#isRevenue').is(':checked'))? 'Revenue': 'Cost',
                                 "hidden_date[1]": $('#date').val(),
                                 "hidden_flockID[1]": $('#flockField').val(),
                                 "hidden_priceID[1]": $('#priceField').val(),
@@ -309,7 +276,7 @@
                     var col8 = currentRow.find("td:eq(7)").text();
 
 
-                    var check = (status == 'true') ? true : false;
+                    var check = (status == 'Revenue') ? true : false;
                     $('#save').text('Edit');
                     $('#FSID').val(row_id);
                     $('#isRevenue').prop('checked', check);
@@ -357,6 +324,7 @@
         </script>
     </head>
     <body>
+        <jsp:include page="../components/navbar.jsp"/>
         <div class="container">
             <div>
                 <form action="showFSTable" id="searchForm">

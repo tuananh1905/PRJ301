@@ -210,6 +210,46 @@ public class FlockDBContext extends DBContext {
         return days;
     }
     
+    public ArrayList<String> getAllDateBetweenTwoDate(int id){
+        ArrayList<String> l = new ArrayList<>();
+        try {
+            String sql = "DECLARE @StartDateTime DATE\n" +
+                        "DECLARE @EndDateTime DATE\n" +
+                        "\n" +
+                        "SET @StartDateTime = (SELECT Purchase_date FROM Flocks WHERE FID = ?)\n" +
+                        "SET @EndDateTime = \n" +
+                        "	(SELECT CASE WHEN [Sale_date] is null then GETDATE()\n" +
+                        "			ELSE [Sale_date]\n" +
+                        "			END\n" +
+                        "		FROM Flocks WHERE FID = ?);\n" +
+                        "\n" +
+                        "WITH DateRange(DateData) AS\n" +
+                        "(\n" +
+                        "    SELECT @StartDateTime as Date\n" +
+                        "    UNION ALL\n" +
+                        "    SELECT DATEADD(d, 1, DateData)\n" +
+                        "    FROM DateRange\n" +
+                        "    WHERE DateData < @EndDateTime\n" +
+                        ")\n" +
+                        "SELECT DateData\n" +
+                        "FROM DateRange\n" +
+                        "OPTION (MAXRECURSION 0)";
+            PreparedStatement stm;
+            stm = connection.prepareStatement(sql);
+            stm.setInt(1, id);
+            stm.setInt(2, id);
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                Date d = rs.getDate("DateData");
+                String day = d.toString();
+                l.add(day);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(FlockDBContext.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return l;
+    }
+    
     public int TestdeleteFlock(int FID){
         int error = 0;
         String sql = "DELETE FROM [Flocks]\n" +

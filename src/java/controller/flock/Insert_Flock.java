@@ -199,7 +199,7 @@ public class Insert_Flock extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.getRequestDispatcher("../view/flock/insert.jsp").forward(request, response);
+        request.getRequestDispatcher("../view/flock/search.jsp").forward(request, response);
     }
 
     /**

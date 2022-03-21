@@ -50,17 +50,27 @@ public class Information_Flock extends HttpServlet {
             if(fs.isRevenue()) revenue += total;
             else cost += total;
         }
-        
         ArrayList<Integer> list = new ArrayList<>();
         list.add(revenue);
         list.add(cost);
         list.add(days);
         
+        ArrayList<Financial_Statement> rList = fdb.getTotalFSListDay(1, id);
+        ArrayList<Financial_Statement> cList = fdb.getTotalFSListDay(0, id);
+        
+        ArrayList<String> dlist = fldb.getAllDateBetweenTwoDate(id);
+        
+        ArrayList<ArrayList> l = new ArrayList<>();
+        l.add(list);
+        l.add(rList);
+        l.add(cList);
+        l.add(dlist);
+        
         PrintWriter out = response.getWriter();
         
         Gson gson = new Gson();
         
-        String jsondata = gson.toJson(list);
+        String jsondata = gson.toJson(l);
         
         out.print(jsondata);
     }

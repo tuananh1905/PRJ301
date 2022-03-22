@@ -22,23 +22,25 @@
             </div>
             <div class="modal-body">
                 <form id="addFlock">
-                    <input type="hidden" name="FID" id="FID" value=""/>
+                    <input type="hidden"  name="FID" id="FID" value=""/>
                     <div class="input-group">
-                        <span class="input-group-text">Name: </span>
+                        <span class="input-group-text">Name </span>
                         <!--                    <select class="form-select"  aria-label="Default select example" name="prdid" id="prdid_s"  onchange="submitSearchFlock();">-->
-                        <input type="name" name="name" id="name" value="" />
+                        <input class="form-control" type="name" name="name" id="name" value="" />
                     </div>
+                    <span id="error_name" class="text-danger"></span>
                     </br>
 
                     <div class="input-group">
                         <span class="input-group-text">Purchase date </span>
-                        <input type="date" name="purchase_date" id="purchase_date" value="" />
+                        <input class="form-control" type="date" name="purchase_date" id="purchase_date" value="" />
                     </div>
+                    <span id="error_date" class="text-danger"></span>
                     </br>
 
                     <div class="input-group">
                         <span class="input-group-text">Sale date </span>
-                        <input type="date" name="sale_date" id="sale_date" value="" /> <br/>
+                        <input class="form-control" type="date" name="sale_date" id="sale_date" value="" /> <br/>
                     </div>
 
 <!--                    <div class="input-group">

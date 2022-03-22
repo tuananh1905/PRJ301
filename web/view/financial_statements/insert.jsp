@@ -58,6 +58,10 @@
 
             $(document).ready(function () {
                 $('#add').click(function () {
+                    $('#error_date').text('');
+                    $('#date').prop('style').removeProperty('border-color');
+                    $('#error_quantily').text('');
+                    $('#quantily').prop('style').removeProperty('border-color');
                     var date = new Date();
                     var day = date.getDate();
                     var month = date.getMonth() + 1;
@@ -93,10 +97,17 @@
                     var total = parseInt(price) * parseInt(quantily);
                     var decrepsion = $('#decrepsion').val();
 
-                    if ($('#quantily').val() == '') {
-                        error_quantily = 'Quantily is required';
-                        $('#error_quantily').text(error_quantily);
-                        $('#quantily').css('border-color', '#cc0000');
+                    if ($('#quantily').val() == '' || $('#date').val() == '') {
+                        if ($('#quantily').val() == '') {
+                            error_quantily = 'Quantily is required';
+                            $('#error_quantily').text(error_quantily);
+                            $('#quantily').css('border-color', '#cc0000');
+                        }
+                        if($('#date').val() == '') {
+                            error_date = 'Date is required';
+                            $('#error_date').text(error_date);
+                            $('#date').css('border-color', '#cc0000');
+                        }
                     } else {
                         if ($('#save').text() == 'Save') {
                             count += 1;
@@ -113,8 +124,11 @@
 //                            html += '     <td><button type="button" name="view_details" class="btn btn-warning btn-xs view_details" id="' + count + '" data-bs-toggle="modal" data-bs-target="#ModalPopup">View</button></td>';
 //                            html += '     <td><button type="button" name="remove_details" class="btn btn-danger btn-xs remove_details" id="' + count + '">Remove</button></td>';
 //                            html += '</tr>';
-
-                            html += '<tr id="row_' + count + '">';
+                            if (isRevenue == 'Revenue') {
+                                html += '<tr class="table-info" id="row_' + count + '">';
+                            } else {
+                                html += '<tr class="table-danger" id="row_' + count + '">';
+                            }
                             html += '     <td>' + isRevenue + '<input type="hidden" name="hidden_isRevenue[" id="isRevenue_' + count + '" class="isRevenue" value="' + isRevenue + '"/></td>';
                             html += '     <td>' + date + '<input type="hidden" name="hidden_date[" id="date_' + count + '" class="date" value="' + date + '"/></td>';
                             html += '     <td>' + flockName + '<input type="hidden" name="hidden_flockID[" id="flockID_' + count + '" class="flockID" value="' + flockID + '"/></td>';
@@ -150,6 +164,10 @@
                 });
 
                 $(document).on('click', '.view_details', function () {
+                    $('#error_date').text('');
+                    $('#date').prop('style').removeProperty('border-color');
+                    $('#error_quantily').text('');
+                    $('#quantily').prop('style').removeProperty('border-color');
                     var row_id = $(this).attr("id");
                     var isRevenue = $('#isRevenue_' + row_id + '').val();
                     var date = $('#date_' + row_id + '').val();

@@ -22,8 +22,9 @@
 
                 <div class="input-group">
                     <span class="input-group-text">Date </span>
-                    <input type="date" name="date" id="date"/>
+                    <input class="form-control" type="date" name="date" id="date"/>
                 </div>
+                <span id="error_date" class="text-danger"></span>
                 </br>
 
                 <div class="input-group">
@@ -54,14 +55,14 @@
                 
                 <div class="input-group">
                     <span class="input-group-text">Quantily </span>
-                    <input type="number" id="quantily" name="quantily"/>
+                    <input class="form-control" type="number" id="quantily" name="quantily"/>
                 </div>
                 <span id="error_quantily" class="text-danger"></span>
                 </br>
                 
                 <div class="input-group">
                     <span class="input-group-text">Decrepsion</span>
-                    <input type="text" id="decrepsion" name="decrepsion"/>
+                    <input class="form-control" type="text" id="decrepsion" name="decrepsion"/>
                 </div>
             </div>
             <div class="modal-footer form-group">

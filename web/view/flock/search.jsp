@@ -29,12 +29,7 @@
                     url: $('#submitForm').attr('action'),
                     data: $('#submitForm').serialize(),
                     success: function (data) {
-//                        $('#modal').removeClass('active');
-//                        $('#overlay').removeClass('active');
-//                        $('#tableField').html(data);
                         submitSearchForm();
-//                        $.getScript("../js/popupModal.js");
-//                        $.getScript("../js/popupModalDelete.js");
                     }
                 });
                 return false;
@@ -109,6 +104,10 @@
             }
             $(document).ready(function () {
                 $('#add').click(function () {
+                    $('#error_name').text('');
+                    $('#name').prop('style').removeProperty('border-color');
+                    $('#error_date').text('');
+                    $('#purchase_date').prop('style').removeProperty('border-color');
                     $('#ModalPopup .modal-title').html('Add new flock');
                     $('#name').val('');
                     $('#purchase_date').val('');
@@ -117,6 +116,10 @@
                 });
 
                 $(document).on('click', '.view_details', function () {
+                    $('#error_name').text('');
+                    $('#name').prop('style').removeProperty('border-color');
+                    $('#error_date').text('');
+                    $('#purchase_date').prop('style').removeProperty('border-color');
                     var currentRow = $(this).closest("tr");
                     var col1 = currentRow.find("td:eq(0)").text();
                     var col2 = currentRow.find("td:eq(1)").text();
@@ -242,6 +245,18 @@
 
                 $('#addFlock').on('submit', function (event) {
                     event.preventDefault();
+                    var error_name = '';
+                    var error_date = '';
+                    if($('#name').val() == ''){
+                        error_name = 'Product is required';
+                        $('#error_name').text(error_name);
+                        $('#name').css('border-color', '#cc0000');
+                    }
+                    if($('#purchase_date').val() == ''){
+                        error_date = 'Date is required';
+                        $('#error_date').text(error_date);
+                        $('#purchase_date').css('border-color', '#cc0000');
+                    }
                     if ($('#save').val() == 'Save') {
                         $.ajax({
                             url: 'Insert',

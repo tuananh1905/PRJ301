@@ -17,6 +17,21 @@
         <title>JSP Page</title>
     </head>
     <script>
+        (function () {
+            'use strict';
+            const forms = document.querySelectorAll('.requires-validation');
+            Array.from(forms)
+                    .forEach(function (form) {
+                        form.addEventListener('submit', function (event) {
+                            if (!form.checkValidity()) {
+                                event.preventDefault();
+                                event.stopPropagation();
+                            }
+
+                            form.classList.add('was-validated');
+                        }, false);
+                    });
+        })();
         window.onload = function () {
             submitSearchForm();
         };
@@ -78,6 +93,12 @@
         }
         $(document).ready(function () {
             $('#add').click(function () {
+                $('#error_product').text('');
+                $('#date_s').prop('style').removeProperty('border-color');
+                $('#error_price').text('');
+                $('#price_s').prop('style').removeProperty('border-color');
+                $('#error_date').text('');
+                $('#prdid_s').prop('style').removeProperty('border-color');
                 var date = new Date();
                 var day = date.getDate();
                 var month = date.getMonth() + 1;
@@ -95,6 +116,12 @@
             });
 
             $(document).on('click', '.view_details', function () {
+                $('#error_product').text('');
+                $('#date_s').prop('style').removeProperty('border-color');
+                $('#error_price').text('');
+                $('#price_s').prop('style').removeProperty('border-color');
+                $('#error_date').text('');
+                $('#prdid_s').prop('style').removeProperty('border-color');
                 var currentRow = $(this).closest("tr");
                 var col1 = currentRow.find("td:eq(0)").text();
                 var col2 = currentRow.find("td:eq(1)").text();
@@ -157,6 +184,24 @@
 
             $('#addPrice').on('submit', function (event) {
                 event.preventDefault();
+                var error_product = '';
+                var error_date = '';
+                var error_price = '';
+                if($('#prdid_s').val() == 0){
+                    error_product = 'Product is required';
+                    $('#error_product').text(error_product);
+                    $('#prdid_s').css('border-color', '#cc0000');
+                }
+                if($('#date_s').val() == ''){
+                    error_date = 'Date is required';
+                    $('#error_date').text(error_date);
+                    $('#date_s').css('border-color', '#cc0000');
+                }
+                if($('#price_s').val() == ''){
+                    error_price = 'Price is required';
+                    $('#error_price').text(error_price);
+                    $('#price_s').css('border-color', '#cc0000');
+                }
                 if ($('#save').val() == 'Save') {
                     $.ajax({
                         url: 'Insert',

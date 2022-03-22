@@ -131,20 +131,13 @@
                 });
             }
 
-//            function submitSearchForm() {
-//                $.ajax({
-//                    type: 'POST',
-//                    url: $('#searchForm').attr('action'),
-//                    data: $('#searchForm').serialize(),
-//                    dataType: "json",
-//                    success: function (jsondata) {
-//                        var html = "";
-//                    }
-//                });
-//            }
             $(document).ready(function () {
 
                 $('#add').click(function () {
+                    $('#error_date').text('');
+                    $('#date').prop('style').removeProperty('border-color');
+                    $('#error_quantily').text('');
+                    $('#quantily').prop('style').removeProperty('border-color');
                     $('#ModalPopup .modal-title').html('Add a new Finnancial Statement record');
                     var date = new Date();
                     var day = date.getDate();
@@ -216,6 +209,16 @@
                 });
 
                 $("#save").click(function () {
+                    if ($('#quantily').val() == '') {
+                        error_quantily = 'Quantily is required';
+                        $('#error_quantily').text(error_quantily);
+                        $('#quantily').css('border-color', '#cc0000');
+                    }
+                    if($('#date').val() == '') {
+                        error_date = 'Date is required';
+                        $('#error_date').text(error_date);
+                        $('#date').css('border-color', '#cc0000');
+                    }
                     if ($('#save').text() == 'Save') {
                         $.ajax({
                             url: 'Insert',
@@ -265,6 +268,10 @@
                 });
 
                 $(document).on('click', '.view_details', function () {
+                    $('#error_date').text('');
+                    $('#date').prop('style').removeProperty('border-color');
+                    $('#error_quantily').text('');
+                    $('#quantily').prop('style').removeProperty('border-color');
                     var currentRow = $(this).closest("tr");
                     var row_id = currentRow.attr("id");
                     var status = currentRow.find("td:eq(0)").text();

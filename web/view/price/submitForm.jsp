@@ -13,10 +13,10 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form id="addPrice">
+                <form id="addPrice" class="needs-validation">
                     <input type="hidden" name="pid" id="pid_s" value=""/>
                     <div class="input-group">
-                        <span class="input-group-text">Product: </span>
+                        <span class="input-group-text">Product </span>
                         <!--                    <select class="form-select"  aria-label="Default select example" name="prdid" id="prdid_s"  onchange="submitSearchFlock();">-->
                         <select class="form-select"  aria-label="Default select example" name="prdid" id="prdid_s">
                             <option value="0">---All of product---</option>
@@ -28,24 +28,26 @@
                             <option value="6">Other</option>
                         </select>
                     </div>
+                    <span id="error_product" class="text-danger"></span>
                     </br>
 
                     <div class="input-group">
                         <span class="input-group-text">Date </span>
-                        <input type="date" name="date" id="date_s" value="<%=new java.sql.Date(java.util.Calendar.getInstance().getTime().getTime())%>"/>
+                        <input class="form-control" type="date" name="date" id="date_s" value="<%=new java.sql.Date(java.util.Calendar.getInstance().getTime().getTime())%>"/>
                     </div>
+                    <span id="error_date" class="text-danger"></span>
                     </br>
 
                     <div class="input-group">
                         <span class="input-group-text">Price </span>
-                        <input type="number" name="price" id="price_s"/>
+                        <input class="form-control" type="number" name="price" id="price_s"/>
                     </div>
-                    <span id="error_quantily" class="text-danger"></span>
+                    <span id="error_price" class="text-danger"></span>
                     </br>
 
                     <div class="input-group">
                         <span class="input-group-text">Decrepsion</span>
-                        <input type="text" id="decrepsion" name="decrepsion"/>
+                        <input class="form-control" type="text" id="decrepsion" name="decrepsion"/>
                     </div>
                 </form>
             </div>
